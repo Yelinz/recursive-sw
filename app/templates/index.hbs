@@ -1,4 +1,3 @@
-<div class="content">
 {{#each model as |obj|}}
   {{#if obj.director}}
     {{films-component film=obj}}
@@ -14,5 +13,4 @@
     {{vehicles-component vehicle=obj}}
   {{/if}}
 {{/each}}
-</div>
 {{outlet}}

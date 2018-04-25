@@ -7,7 +7,12 @@ const Router = EmberRouter.extend({
 })
 
 Router.map(function() {
-  this.route("people", { route: "/people/:people_id" })
+  this.route("people", { path: "/people/:people_id" })
+  this.route("films", { path: "/films/:films_id" })
+  this.route("planets", { path: "/planets/:planets_id" })
+  this.route("species", { path: "/species/:species_id" })
+  this.route("starships", { path: "/starships/:starships_id" })
+  this.route("vehicles", { path: "/vehicles/:vehicles_id" })
 })
 
 export default Router
