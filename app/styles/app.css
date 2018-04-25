@@ -1,0 +1,23 @@
+html {
+  font-family: sans-serif;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+ul lh {
+  font-weight: bold;
+}
+
+.content {
+  display: flex;
+  flex-direcion: column;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 30vw;
+  padding: 10px;
+}

@@ -1,0 +1,16 @@
+{{#each model as |obj|}}
+  {{#if obj.director}}
+    {{films-component film=obj}}
+  {{else if obj.gender}}
+    {{people-component person=obj}}
+  {{else if obj.climate}}
+    {{planets-component planet=obj}}
+  {{else if obj.designation}}
+    {{species-component species=obj}}
+  {{else if obj.MGLT}}
+    {{starships-component starship=obj}}
+  {{else if obj.type_vehicles}}
+    {{vehicles-component vehicle=obj}}
+  {{/if}}
+{{/each}}
+{{outlet}}

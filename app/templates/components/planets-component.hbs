@@ -1,0 +1,15 @@
+{{#link-to "planets" planet.id}}
+<div class="card planet">
+  <ul>
+    <lh>{{planet.name}}</lh>
+    <li>Diameter: {{planet.diameter}}km</li>
+    <li>Rotation Time: {{planet.rotation_period}}</li>
+    <li>Orgital Time: {{planet.orbital_period}}</li>
+    <li>Gravity: {{planet.gravity}} G</li>
+    <li>Population: {{planet.population}}</li>
+    <li>Climate: {{planet.climate}}</li>
+    <li>Terrain: {{planet.terrain}}</li>
+    <li>Surface Water: {{planet.surface_water}}%</li>
+  </ul>
+</div>
+{{/link-to}}

@@ -1,0 +1,17 @@
+{{#link-to "vehicles" vehicle.id}}
+<div class="card vehicle">
+  <ul>
+    <lh>{{vehicle.name}}</lh>
+    <li>Model: {{vehicle.model}}</li>
+    <li>Class: {{vehicle.vehicle_class}}</li>
+    <li>Manufacturer: {{vehicle.manufacturer}}</li>
+    <li>Length: {{vehicle.length}}m</li>
+    <li>Cost in Credits: {{vehicle.cost_in_credits}}</li>
+    <li>Crew: {{vehicle.crew}}</li>
+    <li>Passengers: {{vehicle.passengers}}</li>
+    <li>Speed in Atmosphere: {{vehicle.max_atmosphering_speed}}</li>
+    <li>Cargo Capacity: {{vehicle.cargo_capacity}}</li>
+    <li>Consumables: {{vehicle.consumables}}</li>
+  </ul>
+</div>
+{{/link-to}}
