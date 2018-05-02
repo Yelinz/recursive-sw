@@ -1,3 +1,6 @@
+<div class="section vehicles">
+<h3>Vehicles</h3>
+{{#each vehicles as |vehicle|}}
 {{#link-to "vehicles" vehicle.id}}
 <div class="card vehicle">
   <ul>
@@ -15,3 +18,5 @@
   </ul>
 </div>
 {{/link-to}}
+{{else}}No Vehicles{{/each}}
+</div>

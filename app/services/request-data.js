@@ -41,5 +41,41 @@ export default Service.extend({
         resolve(parsedUrls)
       })
     })
+  },
+
+  returnSearchUrls(params) {
+    return new RSVP.Promise(function(resolve) {
+      const types = ["people", "films", "planets", "starships", "vehicles"]
+      let results = []
+      let urlsArr = []
+      let typesProcessed = 0
+      types.forEach(type => {
+        requestData(type, `?search=${params.search}`).then(data => {
+          data = JSON.parse(data)
+          results.push(data.results)
+          /*
+          let next = data.next
+          while (next !== null) {
+            requestData(type, data.next.split("/")[5]).then(data => {
+              data = JSON.parse(data)
+              results.push(data.results)
+              next = data.next
+            })
+          }
+          */
+          results.forEach((result, id) => {
+            result.forEach(entry => {
+              let splitUrl = entry.url.split("/")
+              urlsArr.push([splitUrl[4], splitUrl[5]])
+            })
+            results.splice(id)
+          })
+          typesProcessed++
+          if (typesProcessed === types.length) {
+            resolve(urlsArr)
+          }
+        })
+      })
+    })
   }
 })

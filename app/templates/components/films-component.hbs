@@ -1,3 +1,6 @@
+<div class="section films">
+<h3>Films</h3>
+{{#each films as |film|}}
 {{#link-to "films" film.id}}
 <div class="card film">
   <ul>
@@ -10,3 +13,5 @@
   </ul>
 </div>
 {{/link-to}}
+{{else}}No Films{{/each}}
+</div>

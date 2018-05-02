@@ -1,15 +1,20 @@
-{{#link-to "species" species.id}}
-<div class="card species">
+<div class="section species">
+<h3>Species</h3>
+{{#each species as |specie|}}
+{{#link-to "species" specie.id}}
+<div class="card specie">
   <ul>
-    <lh>{{species.name}}</lh>
-    <li>Classification: {{species.classification}}</li>
-    <li>Designation: {{species.designation}}</li>
-    <li>Average Height: {{species.average_height}}cm</li>
-    <li>Average Lifespan: {{species.average_lifespan}}</li>
-    <li>Eye Colors: {{species.eye_colors}}</li>
-    <li>Hair Colors: {{species.hair_colors}}</li>
-    <li>Skin Colors: {{species.skin_colors}}</li>
-    <li>Language: {{species.language}}</li>
+    <lh>{{specie.name}}</lh>
+    <li>Classification: {{specie.classification}}</li>
+    <li>Designation: {{specie.designation}}</li>
+    <li>Average Height: {{specie.average_height}}cm</li>
+    <li>Average Lifespan: {{specie.average_lifespan}}</li>
+    <li>Eye Colors: {{specie.eye_colors}}</li>
+    <li>Hair Colors: {{specie.hair_colors}}</li>
+    <li>Skin Colors: {{specie.skin_colors}}</li>
+    <li>Language: {{specie.language}}</li>
   </ul>
 </div>
 {{/link-to}}
+{{else}}No Species{{/each}}
+</div>

@@ -1,16 +1,21 @@
-{{#each model as |obj|}}
-  {{#if obj.director}}
-    {{films-component film=obj}}
-  {{else if obj.gender}}
-    {{people-component person=obj}}
-  {{else if obj.climate}}
-    {{planets-component planet=obj}}
-  {{else if obj.designation}}
-    {{species-component species=obj}}
-  {{else if obj.MGLT}}
-    {{starships-component starship=obj}}
-  {{else if obj.type_vehicles}}
-    {{vehicles-component vehicle=obj}}
-  {{/if}}
-{{/each}}
+{{#if model.pilots}}
+  {{people-component people=model.pilots}}
+{{else if model.characters}}
+  {{people-component people=model.characters}}
+{{else if model.people}}
+  {{people-component people=model.people}}
+{{else if model.residents}}
+  {{people-component people=model.residents}}
+{{/if}}
+
+{{#if model.planets}}
+  {{planets-component planets=model.planets}}
+{{else if model.homeworld}}
+  {{planets-component planets=model.homeworld}}
+{{/if}}
+
+{{species-component species=model.species}}
+{{starships-component starships=model.starships}}
+{{vehicles-component vehicles=model.vehicles}}
+{{films-component films=model.films}}
 {{outlet}}

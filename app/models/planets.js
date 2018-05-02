@@ -1,15 +1,18 @@
-import DS from "ember-data"
+import attr from "ember-data/attr"
+import Model from "ember-data/model"
+import { hasMany } from "ember-data/relationships"
 
-export default DS.Model.extend({
-  name: DS.attr(),
-  diameter: DS.attr(),
-  rotation_period: DS.attr(),
-  orbital_period: DS.attr(),
-  gravity: DS.attr(),
-  population: DS.attr(),
-  climate: DS.attr(),
-  terrain: DS.attr(),
-  surface_water: DS.attr(),
-  residents: DS.attr(),
-  films: DS.attr()
+export default Model.extend({
+  name: attr("string"),
+  diameter: attr("string"),
+  rotation_period: attr("string"),
+  orbital_period: attr("string"),
+  gravity: attr("string"),
+  population: attr("string"),
+  climate: attr("string"),
+  terrain: attr("string"),
+  surface_water: attr("string"),
+
+  residents: hasMany("people"),
+  films: hasMany("films")
 })

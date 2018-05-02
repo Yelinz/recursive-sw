@@ -1,15 +1,18 @@
-import DS from "ember-data"
+import attr from "ember-data/attr"
+import Model from "ember-data/model"
+import { hasMany } from "ember-data/relationships"
 
-export default DS.Model.extend({
-  title: DS.attr(),
-  episode_id: DS.attr(),
-  opening_crawl: DS.attr(),
-  director: DS.attr(),
-  producer: DS.attr(),
-  release_date: DS.attr(),
-  species: DS.attr(),
-  starships: DS.attr(),
-  vehicles: DS.attr(),
-  characters: DS.attr(),
-  planets: DS.attr()
+export default Model.extend({
+  title: attr("string"),
+  episode_id: attr("string"),
+  opening_crawl: attr("string"),
+  director: attr("string"),
+  producer: attr("string"),
+  release_date: attr("string"),
+
+  species: hasMany("species"),
+  starships: hasMany("starships"),
+  vehicles: hasMany("vehicles"),
+  characters: hasMany("people"),
+  planets: hasMany("planets")
 })
