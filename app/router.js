@@ -13,7 +13,6 @@ Router.map(function() {
   this.route("species", { path: "/species/:species_id" })
   this.route("starships", { path: "/starships/:starships_id" })
   this.route("vehicles", { path: "/vehicles/:vehicles_id" })
-  this.route('search');
 })
 
 export default Router

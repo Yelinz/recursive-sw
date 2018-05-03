@@ -1,21 +1,29 @@
-{{#if model.pilots}}
-  {{people-component people=model.pilots}}
-{{else if model.characters}}
-  {{people-component people=model.characters}}
-{{else if model.people}}
-  {{people-component people=model.people}}
-{{else if model.residents}}
-  {{people-component people=model.residents}}
-{{/if}}
+<div class="head">
+  <h1>Recursive Star Wars Info</h1>
+  {{link-to "Home""index"}}
+  {{input value=search key-press=(action "search") placeholder="Search" class="search"}}
+</div>
+<div class="content">
+  {{log model}}
+  {{log results}}
+  {{#if results.pilots}}
+    {{people-component people=results.pilots}}
+  {{else if results.characters}}
+    {{people-component people=results.characters}}
+  {{else if results.people}}
+    {{people-component people=results.people}}
+  {{else if results.residents}}
+    {{people-component people=results.residents}}
+  {{/if}}
 
-{{#if model.planets}}
-  {{planets-component planets=model.planets}}
-{{else if model.homeworld}}
-  {{planets-component planets=model.homeworld}}
-{{/if}}
+  {{#if results.planets}}
+    {{planets-component planets=results.planets}}
+  {{else if results.homeworld}}
+    {{planets-component planets=results.homeworld}}
+  {{/if}}
 
-{{species-component species=model.species}}
-{{starships-component starships=model.starships}}
-{{vehicles-component vehicles=model.vehicles}}
-{{films-component films=model.films}}
-{{outlet}}
+  {{species-component species=results.species}}
+  {{starships-component starships=results.starships}}
+  {{vehicles-component vehicles=results.vehicles}}
+  {{films-component films=results.films}}
+</div>
