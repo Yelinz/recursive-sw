@@ -30,7 +30,7 @@ export default Controller.extend({
           search: searchParam
         })
       })
-      this.set("filtered", filtered)
+      this.set("filtered", searchParam === "" ? undefined : filtered)
     }
   }
 })

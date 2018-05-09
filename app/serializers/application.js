@@ -1,13 +1,7 @@
 import DS from "ember-data"
 
 export default DS.JSONSerializer.extend({
-  normalizeFindRecordResponse(
-    store,
-    primaryModelClass,
-    payload,
-    id,
-    requestType
-  ) {
+  normalizeFindRecordResponse(store, primaryModelClass, payload, id) {
     payload.id = id
 
     // Parses Urls for Relationships
@@ -25,37 +19,15 @@ export default DS.JSONSerializer.extend({
       payload.homeworld = payload.homeworld.split("/")[5]
     }
 
-    let supah = this._super(...arguments)
-    //console.log(supah)
-    return supah
-    //return this._super(...arguments)
+    return this._super(...arguments)
   },
 
-  normalizeQueryResponse(store, primaryModelClass, payload, id, requestType) {
-    /*
-    if (payload.results.length !== 0) {
-      id = 1
-      payload.results.forEach(element => {
-        element.id = element.url.split("/")[5]
-      })
-      payload = { attributes: payload, id: 1, type: "search" }
-      let supah = this._super(...arguments)
-      console.log(supah)
-      return supah
-    }
-    */
+  normalizeQueryResponse(store, primaryModelClass, payload, id) {
     if (payload.hasOwnProperty("count")) {
-      console.log(...arguments)
       payload.results.forEach(element => {
         element.id = element.url.split("/")[5]
       })
-      return this._super(
-        store,
-        primaryModelClass,
-        payload.results,
-        id,
-        requestType
-      )
+      return this._super(store, primaryModelClass, payload.results, id)
     } else {
       return this._super(...arguments)
     }

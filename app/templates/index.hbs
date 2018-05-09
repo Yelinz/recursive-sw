@@ -1,29 +1,49 @@
 <div class="head">
-  <h1>Recursive Star Wars Info</h1>
-  {{link-to "Home""index"}}
-  {{input value=search key-press=(action "search") placeholder="Search" class="search"}}
+  {{#link-to "index"}}
+  <h1>Alot of Star Wars Info</h1>
+  {{/link-to}}
+  {{input value=search key-up=(action "search") placeholder="Search" class="search"}}
 </div>
 <div class="content">
-  {{log model}}
-  {{log results}}
-  {{#if results.pilots}}
-    {{people-component people=results.pilots}}
-  {{else if results.characters}}
-    {{people-component people=results.characters}}
-  {{else if results.people}}
-    {{people-component people=results.people}}
-  {{else if results.residents}}
-    {{people-component people=results.residents}}
-  {{/if}}
+  <details open class="section people">
+    <summary>People</summary>
+    {{#if results.pilots}}
+      {{people-component people=results.pilots}}
+    {{else if results.characters}}
+      {{people-component people=results.characters}}
+    {{else if results.people}}
+      {{people-component people=results.people}}
+    {{else if results.residents}}
+      {{people-component people=results.residents}}
+    {{/if}}
+  </details>
 
-  {{#if results.planets}}
-    {{planets-component planets=results.planets}}
-  {{else if results.homeworld}}
-    {{planets-component planets=results.homeworld}}
-  {{/if}}
+  <details class="section planets">
+    <summary>Planets</summary>
+    {{#if results.planets}}
+      {{planets-component planets=results.planets}}
+    {{else if results.homeworld}}
+      {{planets-component planets=results.homeworld}}
+    {{/if}}
+  </details>
 
-  {{species-component species=results.species}}
-  {{starships-component starships=results.starships}}
-  {{vehicles-component vehicles=results.vehicles}}
-  {{films-component films=results.films}}
+  <details class="section species">
+    <summary>Species</summary>
+    {{species-component species=results.species}}
+  </details>
+
+  <details class="section starships">
+    <summary>Starships</summary>
+    {{starships-component starships=results.starships}}
+  </details>
+
+  <details class="section vehicles">
+    <summary>Vehicles</summary>
+    {{vehicles-component vehicles=results.vehicles}}
+  </details>
+
+  <details class="section films">
+    <summary>Films</summary>
+    {{films-component films=results.films}}
+  </details>
 </div>
