@@ -1,3 +1,5 @@
+<div class="section-content">
+{{#each starships as |starship|}}
 {{#link-to "starships" starship.id}}
 <div class="card starship">
   <ul>
@@ -17,3 +19,5 @@
     </ul>
 </div>
 {{/link-to}}
+{{else}}No Starships{{/each}}
+</div>

@@ -1,14 +1,18 @@
-{{#link-to "people" person.id}}
-<div class="card person">
-  <ul>
-    <lh>{{person.name}}</lh>
-    <li>Height: {{person.height}}cm</li>
-    <li>Weight: {{person.mass}}kg</li>
-    <li>Hair Color: {{person.hair_color}}</li>
-    <li>Skin Color: {{person.skin_color}}</li>
-    <li>Eye Color: {{person.eye_color}}</li>
-    <li>Birth Year: {{person.birth_year}}</li>
-    <li>Gender: {{person.gender}}</li>
-  </ul>
+<div class="section-content">
+{{#each people as |person|}}
+  {{#link-to "people" person.id}}
+    <div class="card person">
+      <ul>
+        <lh>{{person.name}}</lh>
+        <li>Height: {{person.height}}cm</li>
+        <li>Weight: {{person.mass}}kg</li>
+        <li>Hair Color: {{person.hair_color}}</li>
+        <li>Skin Color: {{person.skin_color}}</li>
+        <li>Eye Color: {{person.eye_color}}</li>
+        <li>Birth Year: {{person.birth_year}}</li>
+        <li>Gender: {{person.gender}}</li>
+      </ul>
+    </div>
+  {{/link-to}}
+{{else}}No People{{/each}}
 </div>
-{{/link-to}}

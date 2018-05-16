@@ -1,19 +1,22 @@
-import DS from "ember-data"
+import attr from "ember-data/attr"
+import Model from "ember-data/model"
+import { hasMany } from "ember-data/relationships"
 
-export default DS.Model.extend({
-  name: DS.attr(),
-  model: DS.attr(),
-  starship_class: DS.attr(),
-  manufacturer: DS.attr(),
-  cost_in_credits: DS.attr(),
-  length: DS.attr(),
-  crew: DS.attr(),
-  passengers: DS.attr(),
-  max_atmosphering_speed: DS.attr(),
-  hyperdrive_rating: DS.attr(),
-  MGLT: DS.attr(),
-  cargo_capacity: DS.attr(),
-  consumables: DS.attr(),
-  films: DS.attr(),
-  pilots: DS.attr()
+export default Model.extend({
+  name: attr("string"),
+  model: attr("string"),
+  starship_class: attr("string"),
+  manufacturer: attr("string"),
+  cost_in_credits: attr("string"),
+  length: attr("string"),
+  crew: attr("string"),
+  passengers: attr("string"),
+  max_atmosphering_speed: attr("string"),
+  hyperdrive_rating: attr("string"),
+  MGLT: attr("string"),
+  cargo_capacity: attr("string"),
+  consumables: attr("string"),
+
+  pilots: hasMany("people"),
+  films: hasMany("films")
 })

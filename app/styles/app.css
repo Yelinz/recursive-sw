@@ -11,13 +11,42 @@ ul lh {
   font-weight: bold;
 }
 
+.head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.head a {
+  margin: 10px 30px;
+}
+
 .content {
   display: flex;
-  flex-direcion: column;
-  flex-wrap: wrap;
+  flex-flow: column wrap;
+}
+
+.section > summary {
+  text-align: center;
+  margin: 20px;
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.section-content {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  width: 90vw;
+  margin: 20px;
 }
 
 .card {
-  width: 30vw;
   padding: 10px;
+}
+
+.search {
+  position: absolute;
+  right: 5vw;
 }
