@@ -81,3 +81,18 @@ ul lh {
   justify-content: space-evenly;
   margin-bottom: 20px;
 }
+
+.filters {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.filters-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.filter {
+  margin: 5vh 6vw;
+}

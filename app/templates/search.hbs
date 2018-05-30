@@ -1,34 +1,52 @@
 <div class="checkboxes">
-  <div class="checkbox">
-    <label for="checkbox-people">People</label>
-    {{input type="checkbox" checked=checkboxes.people id="checkbox-people"}}
-  </div>
-  <div class="checkbox">
-    <label for="checkbox-starships">Starships</label>
-    {{input type="checkbox" checked=checkboxes.starships id="checkbox-starships"}}
-  </div>
-  <div class="checkbox">
-    <label for="checkbox-vehicles">Vehicles</label>
-    {{input type="checkbox" checked=checkboxes.vehicles id="checkbox-vehicles"}}
-  </div>
-  <div class="checkbox">
-    <label for="checkbox-species">Species</label>
-    {{input type="checkbox" checked=checkboxes.species id="checkbox-species"}}
-  </div>
-  <div class="checkbox">
-    <label for="checkbox-planets">Planets</label>
-    {{input type="checkbox" checked=checkboxes.planets id="checkbox-planets"}}
-  </div>
-  <div class="checkbox">
-    <label for="checkbox-films">Films</label>
-    {{input type="checkbox" checked=checkboxes.films id="checkbox-films"}}
-  </div>
+{{#each categoryWithSelected as |category|}}
+  <label>
+  <input type="checkbox" onclick={{action 'toggleCategory' category}} checked={{category.checked}}/>
+  {{category.name}}
+  </label>
+{{/each}}
 </div>
+
+<details class="filters">
+  <summary>More Filter</summary>
+  <div class="filters-content">
+    {{#if people}}
+    <details class="filter people" id="filter-people">
+      <summary>People Filter</summary>
+    </details>
+    {{/if}}
+    {{#if starships}}
+    <details class="filter starships" id="filter-starships">
+      <summary>Starships Filter</summary>
+    </details>
+    {{/if}}
+    {{#if vehicles}}
+    <details class="filter vehicles" id="filter-vehicles">
+      <summary>Vehicles Filter</summary>
+    </details>
+    {{/if}}
+    {{#if species}}
+    <details class="filter species" id="filter-species">
+      <summary>Species Filter</summary>
+    </details>
+    {{/if}}
+    {{#if planets}}
+    <details class="filter planets" id="filter-planets">
+      <summary>Planets Filter</summary>
+    </details>
+    {{/if}}
+    {{#if films}}
+    <details class="filter films" id="filter-films">
+      <summary>Films Filter</summary>
+    </details>
+    {{/if}}
+  </div>
+</details>
 
 <input value={{search}} onKeyUp={{action "handleSearch" value="target.value"}} placeholder="Search" class="search"/>
 
 {{#if model.people}}
-<details class="section people">
+<details open class="section people">
   <summary>People</summary>
   {{people-component people=model.people}}
 </details>

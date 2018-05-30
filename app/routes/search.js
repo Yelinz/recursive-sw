@@ -3,33 +3,31 @@ import RSVP from "rsvp"
 
 export default Route.extend({
   queryParams: {
-    search: {
-      refreshModel: true
-    }
+    search: { refreshModel: true },
+    people: { refreshModel: true },
+    starships: { refreshModel: true },
+    vehicles: { refreshModel: true },
+    species: { refreshModel: true },
+    planets: { refreshModel: true },
+    films: { refreshModel: true }
   },
 
   model(params) {
-    let queryDict = {}
+    let searchResult = {}
+
     if (params.search !== "") {
-      if (this.controllerFor("search").get("checkboxes.people")) {
-        queryDict.people = this.get("store").query("people", params)
-      }
-      if (this.controllerFor("search").get("checkboxes.films")) {
-        queryDict.films = this.get("store").query("films", params)
-      }
-      if (this.controllerFor("search").get("checkboxes.starships")) {
-        queryDict.starships = this.get("store").query("starships", params)
-      }
-      if (this.controllerFor("search").get("checkboxes.vehicles")) {
-        queryDict.vehicles = this.get("store").query("vehicles", params)
-      }
-      if (this.controllerFor("search").get("checkboxes.species")) {
-        queryDict.species = this.get("store").query("species", params)
-      }
-      if (this.controllerFor("search").get("checkboxes.planets")) {
-        queryDict.planets = this.get("store").query("planets", params)
-      }
+      this.controllerFor("search")
+        .get("categorys")
+        .forEach(obj => {
+          if (this.controllerFor("search").get(obj.code)) {
+            Object.defineProperty(searchResult, obj.code, {
+              value: this.get("store").query(obj.code, {
+                search: params.search
+              })
+            })
+          }
+        })
     }
-    return RSVP.hash(queryDict)
+    return searchResult
   }
 })
