@@ -1,0 +1,71 @@
+<div class="checkboxes">
+  <div class="checkbox">
+    <label for="checkbox-people">People</label>
+    {{input type="checkbox" checked=checkboxes.people id="checkbox-people"}}
+  </div>
+  <div class="checkbox">
+    <label for="checkbox-starships">Starships</label>
+    {{input type="checkbox" checked=checkboxes.starships id="checkbox-starships"}}
+  </div>
+  <div class="checkbox">
+    <label for="checkbox-vehicles">Vehicles</label>
+    {{input type="checkbox" checked=checkboxes.vehicles id="checkbox-vehicles"}}
+  </div>
+  <div class="checkbox">
+    <label for="checkbox-species">Species</label>
+    {{input type="checkbox" checked=checkboxes.species id="checkbox-species"}}
+  </div>
+  <div class="checkbox">
+    <label for="checkbox-planets">Planets</label>
+    {{input type="checkbox" checked=checkboxes.planets id="checkbox-planets"}}
+  </div>
+  <div class="checkbox">
+    <label for="checkbox-films">Films</label>
+    {{input type="checkbox" checked=checkboxes.films id="checkbox-films"}}
+  </div>
+</div>
+{{input value=search placeholder="Search" class="search"}}
+
+{{#if model.people}}
+<details class="section people">
+  <summary>People</summary>
+  {{people-component people=model.people}}
+</details>
+{{/if}}
+
+{{#if model.starships}}
+<details class="section starships">
+  <summary>Starships</summary>
+  {{starships-component starships=model.starships}}
+</details>
+{{/if}}
+
+{{#if model.vehicles}}
+<details class="section vehicles">
+  <summary>Vehicles</summary>
+  {{vehicles-component vehicles=model.vehicles}}
+</details>
+{{/if}}
+
+{{#if model.species}}
+<details class="section species">
+  <summary>Species</summary>
+  {{species-component species=model.species}}
+</details>
+{{/if}}
+
+{{#if model.planets}}
+<details class="section planets">
+  <summary>Planets</summary>
+    {{planets-component planets=model.planets}}
+</details>
+{{/if}}
+
+{{#if model.films}}
+<details class="section films">
+  <summary>Films</summary>
+  {{films-component films=model.films}}
+</details>
+{{/if}}
+
+{{outlet}}
