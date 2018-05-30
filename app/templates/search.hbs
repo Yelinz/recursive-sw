@@ -24,7 +24,8 @@
     {{input type="checkbox" checked=checkboxes.films id="checkbox-films"}}
   </div>
 </div>
-{{input value=search placeholder="Search" class="search"}}
+
+<input value={{search}} onKeyUp={{action "handleSearch" value="target.value"}} placeholder="Search" class="search"/>
 
 {{#if model.people}}
 <details class="section people">
