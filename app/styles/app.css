@@ -94,5 +94,23 @@ ul lh {
 }
 
 .filter {
-  margin: 5vh 6vw;
+  margin: 5vh 0;
+  width: 300px;
+}
+
+.filter-content {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+}
+
+.filter-checkboxes {
+  margin: 0 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-checkboxes label {
+  display: flex;
+  justify-content: flex-start;
 }

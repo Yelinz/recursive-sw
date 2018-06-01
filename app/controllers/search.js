@@ -20,50 +20,131 @@ export default Controller.extend({
   planets: false,
   films: false,
 
-  categorys: [
-    { code: "people", name: "People" },
-    { code: "starships", name: "Starships" },
-    { code: "vehicles", name: "Vehicles" },
-    { code: "species", name: "Species" },
-    { code: "planets", name: "Planets" },
-    { code: "films", name: "Films" }
-  ],
-
   init() {
     this._super(...arguments)
+    this.categorys = [
+      { name: "People" },
+      { name: "Starships" },
+      { name: "Vehicles" },
+      { name: "Species" },
+      { name: "Planets" },
+      { name: "Films" }
+    ]
+    this.filters = {
+      people: {
+        Gender: [
+          { name: "Male" },
+          { name: "Female" },
+          { name: "Heraphrodite" },
+          { name: "n/a" }
+        ],
+        "Eye Color": [{ name: "Blue" }, { name: "Brown" }]
+      },
+      starships: {
+        Class: [
+          { name: "Starfighter" },
+          { name: "Corvette" },
+          { name: "Star Destroyer" },
+          { name: "Freighter" }
+        ]
+      },
+      vehicles: {
+        Class: [
+          { name: "Wheeled" },
+          { name: "Repulsorcraft" },
+          { name: "Starfighter" }
+        ]
+      },
+      species: {
+        Designation: [{ name: "Sentient" }, { name: "Reptillian" }]
+      },
+      planets: {
+        Terrain: [
+          { name: "Desert" },
+          { name: "Grasslands" },
+          { name: "Mountains" },
+          { name: "Jungle" },
+          { name: "Rainforests" }
+        ]
+      },
+      films: {
+        Producer: [
+          { name: "Rick McCallum" },
+          { name: "Goerge Lucas" },
+          { name: "Gray Krutz" }
+        ]
+      }
+    }
+    this.set("activeFilters", [])
   },
 
   setSearch(value) {
     this.set("search", value)
   },
 
-  categoryWithSelected: Ember.computed(
+  categoryWithSelected: computed(
     "people",
     "starships",
     "vehicles",
     "species",
     "planets",
     "films",
-    "categorys.@each.code",
+    "categorys.@each.name",
     {
       get() {
-        return this.get("categorys").map(({ code, name }) => ({
-          code,
+        return this.get("categorys").map(({ name }) => ({
           name,
-          checked: this.get(code)
+          checked: this.get(name.toLowerCase())
         }))
       }
     }
   ),
+
+  filteredModel: computed("activeFilters.[]", {
+    get() {
+      let model = this.get("model")
+      if (this.get("activeFilters").length !== 0) {
+        this.get("activeFilters").forEach(name => {
+          let activeFilterName = name.toLowerCase()
+          let category
+          let filterKey
+          Object.entries(this.get("filters")).forEach(filterCategory => {
+            Object.entries(filterCategory[1]).forEach(filters => {
+              filters[1].forEach(filterNameObj => {
+                if (filterNameObj.name.toLowerCase() === activeFilterName) {
+                  category = filterCategory[0]
+                  filterKey = filters[0].replace(/ /g, "_").toLowerCase()
+                }
+              })
+            })
+          })
+          model[category] = model[category].filterBy(
+            filterKey,
+            activeFilterName
+          )
+        })
+      }
+      this.get("target").send("refreshRoute")
+      return model
+    }
+  }),
 
   actions: {
     handleSearch(value) {
       debounce(this, this.setSearch, value, 500)
     },
 
-    toggleCategory(category) {
-      const { code } = category
+    toggleCategory(name) {
+      const code = name.toLowerCase()
       this.set(code, !this.get(code))
+    },
+
+    setFilter(name) {
+      if (this.get("activeFilters").includes(name)) {
+        this.get("activeFilters").removeObject(name)
+      } else {
+        this.get("activeFilters").pushObject(name)
+      }
     }
   }
 })

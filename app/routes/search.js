@@ -1,5 +1,4 @@
 import Route from "@ember/routing/route"
-import RSVP from "rsvp"
 
 export default Route.extend({
   queryParams: {
@@ -19,15 +18,23 @@ export default Route.extend({
       this.controllerFor("search")
         .get("categorys")
         .forEach(obj => {
-          if (this.controllerFor("search").get(obj.code)) {
-            Object.defineProperty(searchResult, obj.code, {
-              value: this.get("store").query(obj.code, {
+          let name = obj.name.toLowerCase()
+          if (params[name]) {
+            Object.defineProperty(searchResult, name, {
+              value: this.get("store").query(name, {
                 search: params.search
-              })
+              }),
+              writable: true
             })
           }
         })
     }
     return searchResult
+  },
+
+  actions: {
+    refreshRoute() {
+      this.refresh()
+    }
   }
 })

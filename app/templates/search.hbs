@@ -1,43 +1,49 @@
 <div class="checkboxes">
 {{#each categoryWithSelected as |category|}}
   <label>
-  <input type="checkbox" onclick={{action 'toggleCategory' category}} checked={{category.checked}}/>
+  <input type="checkbox" onclick={{action 'toggleCategory' category.name}} checked={{category.checked}}/>
   {{category.name}}
   </label>
 {{/each}}
 </div>
 
-<details class="filters">
+<details open class="filters">
   <summary>More Filter</summary>
   <div class="filters-content">
     {{#if people}}
-    <details class="filter people" id="filter-people">
+    <details open class="filter people" id="filter-people">
       <summary>People Filter</summary>
+      {{filter-component filterCategorys=filters.people toggleFilter=(action "setFilter")}}
     </details>
     {{/if}}
     {{#if starships}}
     <details class="filter starships" id="filter-starships">
       <summary>Starships Filter</summary>
+      {{filter-component filterCategorys=filters.starships toggleFilter=(action "setFilter")}}
     </details>
     {{/if}}
     {{#if vehicles}}
     <details class="filter vehicles" id="filter-vehicles">
       <summary>Vehicles Filter</summary>
+      {{filter-component filterCategorys=filters.vehicles toggleFilter=(action "setFilter")}}
     </details>
     {{/if}}
     {{#if species}}
     <details class="filter species" id="filter-species">
       <summary>Species Filter</summary>
+      {{filter-component filterCategorys=filters.species toggleFilter=(action "setFilter")}}
     </details>
     {{/if}}
     {{#if planets}}
     <details class="filter planets" id="filter-planets">
       <summary>Planets Filter</summary>
+      {{filter-component filterCategorys=filters.planets toggleFilter=(action "setFilter")}}
     </details>
     {{/if}}
     {{#if films}}
     <details class="filter films" id="filter-films">
       <summary>Films Filter</summary>
+      {{filter-component filterCategorys=filters.films toggleFilter=(action "setFilter")}}
     </details>
     {{/if}}
   </div>
@@ -48,43 +54,42 @@
 {{#if model.people}}
 <details open class="section people">
   <summary>People</summary>
-  {{people-component people=model.people}}
+  {{people-component people=(unless activeFilters model.people filteredModel.people)}}
 </details>
 {{/if}}
 
 {{#if model.starships}}
 <details class="section starships">
   <summary>Starships</summary>
-  {{starships-component starships=model.starships}}
+  {{starships-component starships=(unless activeFilters model.starships filteredModel.starships)}}
 </details>
 {{/if}}
 
 {{#if model.vehicles}}
 <details class="section vehicles">
   <summary>Vehicles</summary>
-  {{vehicles-component vehicles=model.vehicles}}
+  {{vehicles-component vehicles=(unless activeFilters model.vehicles filteredModel.vehicles)}}
 </details>
 {{/if}}
 
 {{#if model.species}}
 <details class="section species">
   <summary>Species</summary>
-  {{species-component species=model.species}}
+  {{species-component species=(unless activeFilters model.species filteredModel.species)}}
 </details>
 {{/if}}
 
 {{#if model.planets}}
 <details class="section planets">
   <summary>Planets</summary>
-    {{planets-component planets=model.planets}}
+    {{planets-component planets=(unless activeFilters model.planets filteredModel.planets)}}
 </details>
 {{/if}}
 
 {{#if model.films}}
 <details class="section films">
   <summary>Films</summary>
-  {{films-component films=model.films}}
+  {{films-component films=(unless activeFilters model.films filteredModel.films)}}
 </details>
 {{/if}}
 
-{{outlet}}
