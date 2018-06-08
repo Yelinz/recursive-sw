@@ -1,4 +1,4 @@
-import Route from "@ember/routing/route"
+import Route from '@ember/routing/route'
 
 export default Route.extend({
   queryParams: {
@@ -14,27 +14,26 @@ export default Route.extend({
   model(params) {
     let searchResult = {}
 
-    if (params.search !== "") {
-      this.controllerFor("search")
-        .get("categorys")
-        .forEach(obj => {
-          let name = obj.name.toLowerCase()
+    if (params.search !== '') {
+      this.controllerFor('search')
+        .get('categorys')
+        .forEach(category => {
+          let name = category.toLowerCase()
           if (params[name]) {
+            searchResult[name] = this.store.query(name, {
+              search: params.search
+            })
+            /*
             Object.defineProperty(searchResult, name, {
-              value: this.get("store").query(name, {
+              value: this.get('store').query(name, {
                 search: params.search
               }),
               writable: true
             })
+            */
           }
         })
     }
     return searchResult
-  },
-
-  actions: {
-    refreshRoute() {
-      this.refresh()
-    }
   }
 })

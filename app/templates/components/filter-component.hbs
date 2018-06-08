@@ -5,8 +5,8 @@
     <div class="filter-checkboxes">
     {{#each options as |option|}}
       <label>
-        <input type="checkbox" onclick={{action 'toggleFilter' option.name}} checked={{option.checked}} />
-        {{option.name}}
+        <input type="checkbox" onclick={{action 'toggleFilter' option}} checked={{option.checked}} />
+        {{option}}
       </label>
     {{/each}}
     </div>
