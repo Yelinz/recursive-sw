@@ -1,49 +1,43 @@
-<div class="head">
-  {{#link-to "index"}}
-  <h1>Alot of Star Wars Info</h1>
-  {{/link-to}}
-  {{input value=search key-up=(action "search") placeholder="Search" class="search"}}
-</div>
-<div class="content">
-  <details open class="section people">
-    <summary>People</summary>
-    {{#if results.pilots}}
-      {{people-component people=results.pilots}}
-    {{else if results.characters}}
-      {{people-component people=results.characters}}
-    {{else if results.people}}
-      {{people-component people=results.people}}
-    {{else if results.residents}}
-      {{people-component people=results.residents}}
-    {{/if}}
-  </details>
+<details open class="section people">
+  <summary>People</summary>
+  {{#if model.pilots}}
+    {{people-component people=model.pilots}}
+  {{else if model.characters}}
+    {{people-component people=model.characters}}
+  {{else if model.people}}
+    {{people-component people=model.people}}
+  {{else if model.residents}}
+    {{people-component people=model.residents}}
+  {{/if}}
+</details>
 
-  <details class="section planets">
-    <summary>Planets</summary>
-    {{#if results.planets}}
-      {{planets-component planets=results.planets}}
-    {{else if results.homeworld}}
-      {{planets-component planets=results.homeworld}}
-    {{/if}}
-  </details>
+<details class="section starships">
+  <summary>Starships</summary>
+  {{starships-component starships=model.starships}}
+</details>
 
-  <details class="section species">
-    <summary>Species</summary>
-    {{species-component species=results.species}}
-  </details>
+<details class="section vehicles">
+  <summary>Vehicles</summary>
+  {{vehicles-component vehicles=model.vehicles}}
+</details>
 
-  <details class="section starships">
-    <summary>Starships</summary>
-    {{starships-component starships=results.starships}}
-  </details>
+<details class="section species">
+  <summary>Species</summary>
+  {{species-component species=model.species}}
+</details>
 
-  <details class="section vehicles">
-    <summary>Vehicles</summary>
-    {{vehicles-component vehicles=results.vehicles}}
-  </details>
+<details class="section planets">
+  <summary>Planets</summary>
+  {{#if model.planets}}
+    {{planets-component planets=model.planets}}
+  {{else if model.homeworld}}
+    {{planets-component planets=model.homeworld}}
+  {{/if}}
+</details>
 
-  <details class="section films">
-    <summary>Films</summary>
-    {{films-component films=results.films}}
-  </details>
-</div>
+<details class="section films">
+  <summary>Films</summary>
+  {{films-component films=model.films}}
+</details>
+
+{{outlet}}

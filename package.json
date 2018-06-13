@@ -2,9 +2,9 @@
   "name": "recursive-sw",
   "version": "0.0.0",
   "private": true,
-  "description": "Small description for recursive-sw goes here",
+  "description": "Uses swapi.co for displaying info about star wars",
   "license": "MIT",
-  "author": "",
+  "author": "Yelin Zhang",
   "directories": {
     "doc": "doc",
     "test": "tests"

@@ -1,20 +1,39 @@
-import Route from "@ember/routing/route"
-import RSVP from "rsvp"
+import Route from '@ember/routing/route'
 
 export default Route.extend({
-  templateName: "index",
-  controllerName: "index",
+  queryParams: {
+    search: { refreshModel: true },
+    people: { refreshModel: true },
+    starships: { refreshModel: true },
+    vehicles: { refreshModel: true },
+    species: { refreshModel: true },
+    planets: { refreshModel: true },
+    films: { refreshModel: true }
+  },
 
   model(params) {
-    return RSVP.hash({
-      people: this.get("store").query("people", { search: params.search }),
-      films: this.get("store").query("films", { search: params.search }),
-      starships: this.get("store").query("starships", {
-        search: params.search
-      }),
-      vehicles: this.get("store").query("vehicles", { search: params.search }),
-      species: this.get("store").query("species", { search: params.search }),
-      planets: this.get("store").query("planets", { search: params.search })
-    })
+    let searchResult = {}
+
+    if (params.search !== '') {
+      this.controllerFor('search')
+        .get('categorys')
+        .forEach(category => {
+          let name = category.toLowerCase()
+          if (params[name]) {
+            searchResult[name] = this.store.query(name, {
+              search: params.search
+            })
+            /*
+            Object.defineProperty(searchResult, name, {
+              value: this.get('store').query(name, {
+                search: params.search
+              }),
+              writable: true
+            })
+            */
+          }
+        })
+    }
+    return searchResult
   }
 })
