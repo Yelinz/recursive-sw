@@ -67,7 +67,7 @@ ul lh {
 }
 
 .card {
-  padding: 10px;
+  padding: 30px;
   max-width: 400px;
   color: #ffffff;
 }
@@ -94,7 +94,7 @@ ul lh {
 }
 
 .filter {
-  margin: 5vh 0;
+  margin: 5vh 3vw;
   width: 300px;
 }
 
