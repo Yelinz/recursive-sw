@@ -32,7 +32,7 @@ export default Controller.extend({
     ])
     this.set('filters', {
       people: {
-        Gender: ['Male', 'Female', 'Heraphrodite', 'n/a'],
+        Gender: ['Male', 'Female', 'Heraphrodite', 'N/a'],
         'Eye Color': ['Blue', 'Brown', 'Orange', 'Hazel', 'Red']
       },
       starships: {
@@ -58,56 +58,87 @@ export default Controller.extend({
     this.set('search', value)
   },
 
-  filteredModel: computed('activeFilters.[]', 'search', {
-    get() {
-      let model = this.get('model')
-      let resultObj = {}
-      if (this.get('activeFilters').length) {
-        let clonedCategories = JSON.parse(
-          JSON.stringify(this.get('categorys'))
-        ).map(w => w.toLowerCase())
-        this.get('activeFilters').forEach(name => {
-          let activeFilterName = name.toLowerCase()
-          let category
-          let filterKey
-          Object.entries(this.get('filters')).forEach(filterCategory => {
-            Object.entries(filterCategory[1]).forEach(filters => {
-              filters[1].forEach(filterNameObj => {
-                if (filterNameObj.toLowerCase() === activeFilterName) {
-                  category = filterCategory[0]
-                  filterKey = filters[0].replace(/ /g, '_').toLowerCase()
-                }
-              })
-            })
+  getFilterInfo(mode) {
+    let model = this.get('model')
+    let filterInfo = []
+    let resultObj = {}
+    this.get('activeFilters').forEach((name, index) => {
+      filterInfo[index] = []
+      filterInfo[index].push(name.toLowerCase())
+      Object.entries(this.get('filters')).forEach(filterCategory => {
+        Object.entries(filterCategory[1]).forEach(filters => {
+          filters[1].forEach(filterNameObj => {
+            if (filterNameObj.toLowerCase() === filterInfo[index][0]) {
+              filterInfo[index].push(filterCategory[0])
+              filterInfo[index].push(
+                filters[0].replace(/ /g, '_').toLowerCase()
+              )
+            }
           })
-          if (resultObj[category] === undefined) {
-            resultObj[category] = model[category].filterBy(
-              filterKey,
-              activeFilterName
-            )
-          } else {
-            resultObj[category] = resultObj[category].concat(
-              model[category].filterBy(filterKey, activeFilterName)
-            )
-          }
         })
-
-        clonedCategories.forEach((category, index) => {
-          if (resultObj.hasOwnProperty(category)) {
-            clonedCategories.splice(index, 1)
-          }
-        })
-        resultObj = Object.assign(
-          {},
-          resultObj,
-          getProperties(model, clonedCategories)
+      })
+      if (resultObj[filterInfo[index][1]] === undefined) {
+        resultObj[filterInfo[index][1]] = model[filterInfo[index][1]].filterBy(
+          filterInfo[index][2],
+          filterInfo[index][0]
         )
       } else {
-        resultObj = model
+        resultObj[filterInfo[index][1]] = resultObj[
+          filterInfo[index][1]
+        ].concat(
+          model[filterInfo[index][1]].filterBy(
+            filterInfo[index][2],
+            filterInfo[index][0]
+          )
+        )
       }
-      return resultObj
+    })
+    switch (mode) {
+      case 'model':
+        return resultObj
+      case 'info':
+        return filterInfo
+      default:
+        return resultObj
     }
-  }),
+  },
+
+  filteredModel: computed(
+    'activeFilters.[]',
+    'search',
+    'people',
+    'starships',
+    'vehicles',
+    'species',
+    'planets',
+    'films',
+    {
+      get() {
+        let model = this.get('model')
+        let resultObj = {}
+        if (this.get('activeFilters').length) {
+          let clonedCategories = JSON.parse(
+            JSON.stringify(this.get('categorys'))
+          ).map(w => w.toLowerCase())
+          resultObj = this.getFilterInfo('model')
+
+          clonedCategories.forEach((category, index) => {
+            if (resultObj.hasOwnProperty(category)) {
+              clonedCategories.splice(index, 1)
+            }
+          })
+          resultObj = Object.assign(
+            {},
+            resultObj,
+            getProperties(model, clonedCategories)
+          )
+        } else {
+          resultObj = model
+        }
+        return resultObj
+      }
+    }
+  ),
 
   actions: {
     handleSearch(value) {
@@ -115,7 +146,17 @@ export default Controller.extend({
     },
 
     toggleCategory(name) {
-      this.toggleProperty(name.toLowerCase())
+      name = name.toLowerCase()
+      if (this.get(name)) {
+        this.getFilterInfo('info').forEach(filter => {
+          if (filter[1] === name) {
+            this.activeFilters.removeObject(
+              filter[0].charAt(0).toUpperCase() + filter[0].slice(1)
+            )
+          }
+        })
+      }
+      this.toggleProperty(name)
     },
 
     toggleFilter(name) {

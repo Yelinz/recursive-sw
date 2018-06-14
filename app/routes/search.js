@@ -23,14 +23,6 @@ export default Route.extend({
             searchResult[name] = this.store.query(name, {
               search: params.search
             })
-            /*
-            Object.defineProperty(searchResult, name, {
-              value: this.get('store').query(name, {
-                search: params.search
-              }),
-              writable: true
-            })
-            */
           }
         })
     }
