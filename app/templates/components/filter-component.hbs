@@ -1,12 +1,12 @@
 <div class="filter-content">
-{{#each-in filterCategorys as |name options|}}
+{{#each-in filterCategorys as |name filters|}}
   <div class="filter-category">
     <p>{{name}}</p>
     <div class="filter-checkboxes">
-    {{#each options as |option|}}
+    {{#each filters as |filter|}}
       <label>
-        <input type="checkbox" onclick={{action 'toggleFilter' option}} checked={{option.checked}} />
-        {{option}}
+        <input type="checkbox" onclick={{action 'toggleFilter' filter}} checked={{filter.checked}}/>
+        {{filter}}
       </label>
     {{/each}}
     </div>

@@ -1,6 +1,6 @@
 import Controller from '@ember/controller'
 import { debounce } from '@ember/runloop'
-import { computed, getProperties } from '@ember/object'
+import { computed, getProperties, set } from '@ember/object'
 
 export default Controller.extend({
   queryParams: [
@@ -33,7 +33,8 @@ export default Controller.extend({
     this.set('filters', {
       people: {
         Gender: ['Male', 'Female', 'Heraphrodite', 'N/a'],
-        'Eye Color': ['Blue', 'Brown', 'Orange', 'Hazel', 'Red']
+        'Eye Color': ['Blue', 'Brown', 'Orange', 'Hazel', 'Red'],
+        Numeric: ['Height', 'Weight']
       },
       starships: {
         'Starship Class': ['Starfighter', 'Corvette', 'Star Destroyer']
@@ -52,6 +53,7 @@ export default Controller.extend({
       }
     })
     this.set('activeFilters', [])
+    this.set('numericFilters', {})
   },
 
   debounceSearch(value) {
@@ -62,6 +64,7 @@ export default Controller.extend({
     let filter,
       category,
       filterName,
+      filteredModel,
       resultObj = {},
       filterInfo = [],
       model = this.get('model')
@@ -82,20 +85,30 @@ export default Controller.extend({
         })
       })
 
-      let filteredModel = model[category].filter(item => {
-        if (item[filterName] === filter) {
-          return true
-        } else {
-          if (filterName !== 'gender') {
-            return item[filterName].includes(filter)
-          }
-        }
-      })
-
-      if (resultObj[category] === undefined) {
-        resultObj[category] = filteredModel
+      console.log(filterInfo)
+      if (filter === 'numeric') {
+        Object.entries(this.numericFilters).forEach(numericFilter => {
+          filteredModel = model[category].filter(
+            item => item > numericFilter[1]
+          )
+          console.log(filteredModel)
+        })
       } else {
-        resultObj[category] = resultObj[category].concat(filteredModel)
+        filteredModel = model[category].filter(item => {
+          if (item[filterName] === filter) {
+            return true
+          } else {
+            if (filterName !== 'gender') {
+              return item[filterName].includes(filter)
+            }
+          }
+        })
+
+        if (resultObj[category] === undefined) {
+          resultObj[category] = filteredModel
+        } else {
+          resultObj[category] = resultObj[category].concat(filteredModel)
+        }
       }
     })
 
@@ -175,14 +188,27 @@ export default Controller.extend({
 
     valChange(name, value) {
       if (value !== '') {
-        if (!this.get('activeFilters').includes(name)) {
-          this.get('activeFilters').pushObject(name)
+        if (!this.get('activeFilters').includes(value)) {
+          this.get('activeFilters').pushObject(value)
         }
+        set(this.get('numericFilters'), name, value)
       } else {
-        if (this.get('activeFilters').includes(name)) {
-          this.get('activeFilters').removeObject(name)
+        if (this.get('activeFilters').includes(value)) {
+          this.get('activeFilters').removeObject(value)
         }
       }
+      /*
+      if (value !== '') {
+        if (!this.get('activeFilters').includes('numeric')) {
+          this.get('activeFilters').pushObject('numeric')
+        }
+        set(this.get('numericFilters'), name, value)
+      } else {
+        if (this.get('activeFilters').includes('numeric')) {
+          this.get('activeFilters').removeObject('numeric')
+        }
+      }
+      */
     }
   }
 })
