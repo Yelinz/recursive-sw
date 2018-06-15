@@ -7,13 +7,17 @@
 {{/each}}
 </div>
 
-<details open class="filters">
+<details class="filters">
   <summary>More Filter</summary>
   <div class="filters-content">
     {{#if people}}
-    <details open class="filter people" id="filter-people">
+    <details class="filter people" id="filter-people">
       <summary>People Filter</summary>
       {{filter-component filterCategorys=filters.people toggleFilter=(action "toggleFilter")}}
+      <label>
+        Height:
+        {{input type="number" min=1 value=value input=(action "valChange" "height" value)}}
+      </label>
     </details>
     {{/if}}
     {{#if starships}}

@@ -36,7 +36,7 @@ export default Controller.extend({
         'Eye Color': ['Blue', 'Brown', 'Orange', 'Hazel', 'Red']
       },
       starships: {
-        Class: ['Starfighter', 'Corvette', 'Star Destroyer', 'Freighter']
+        'Starship Class': ['Starfighter', 'Corvette', 'Star Destroyer']
       },
       vehicles: {
         'Vehicle Class': ['Wheeled', 'Repulsorcraft', 'Starfighter']
@@ -45,10 +45,10 @@ export default Controller.extend({
         Classification: ['Mammal', 'Artificial', 'Unknown', 'Reptile']
       },
       planets: {
-        Terrain: ['Desert', 'Grasslands', 'Mountains', 'Jungle', 'Rainforests']
+        Terrain: ['Desert', 'Grasslands', 'Mountains', 'Jungles', 'Ocean']
       },
       films: {
-        Producer: ['Rick McCallum', 'Goerge Lucas', 'Gray Krutz']
+        Producer: ['Rick McCallum', 'George Lucas', 'Gray Krutz']
       }
     })
     this.set('activeFilters', [])
@@ -59,40 +59,46 @@ export default Controller.extend({
   },
 
   getFilterInfo(mode) {
-    let model = this.get('model')
-    let filterInfo = []
-    let resultObj = {}
+    let filter,
+      category,
+      filterName,
+      resultObj = {},
+      filterInfo = [],
+      model = this.get('model')
     this.get('activeFilters').forEach((name, index) => {
       filterInfo[index] = []
-      filterInfo[index].push(name.toLowerCase())
+      filter = name.toLowerCase()
+      filterInfo[index].push(filter)
       Object.entries(this.get('filters')).forEach(filterCategory => {
         Object.entries(filterCategory[1]).forEach(filters => {
           filters[1].forEach(filterNameObj => {
-            if (filterNameObj.toLowerCase() === filterInfo[index][0]) {
-              filterInfo[index].push(filterCategory[0])
-              filterInfo[index].push(
-                filters[0].replace(/ /g, '_').toLowerCase()
-              )
+            if (filterNameObj.toLowerCase() === filter) {
+              category = filterCategory[0]
+              filterName = filters[0].replace(/ /g, '_').toLowerCase()
+              filterInfo[index].push(category)
+              filterInfo[index].push(filterName)
             }
           })
         })
       })
-      if (resultObj[filterInfo[index][1]] === undefined) {
-        resultObj[filterInfo[index][1]] = model[filterInfo[index][1]].filterBy(
-          filterInfo[index][2],
-          filterInfo[index][0]
-        )
+
+      let filteredModel = model[category].filter(item => {
+        if (item[filterName] === filter) {
+          return true
+        } else {
+          if (filterName !== 'gender') {
+            return item[filterName].includes(filter)
+          }
+        }
+      })
+
+      if (resultObj[category] === undefined) {
+        resultObj[category] = filteredModel
       } else {
-        resultObj[filterInfo[index][1]] = resultObj[
-          filterInfo[index][1]
-        ].concat(
-          model[filterInfo[index][1]].filterBy(
-            filterInfo[index][2],
-            filterInfo[index][0]
-          )
-        )
+        resultObj[category] = resultObj[category].concat(filteredModel)
       }
     })
+
     switch (mode) {
       case 'model':
         return resultObj
@@ -114,8 +120,8 @@ export default Controller.extend({
     'films',
     {
       get() {
-        let model = this.get('model')
-        let resultObj = {}
+        let model = this.get('model'),
+          resultObj = {}
         if (this.get('activeFilters').length) {
           let clonedCategories = JSON.parse(
             JSON.stringify(this.get('categorys'))
@@ -164,6 +170,18 @@ export default Controller.extend({
         this.get('activeFilters').removeObject(name)
       } else {
         this.get('activeFilters').pushObject(name)
+      }
+    },
+
+    valChange(name, value) {
+      if (value !== '') {
+        if (!this.get('activeFilters').includes(name)) {
+          this.get('activeFilters').pushObject(name)
+        }
+      } else {
+        if (this.get('activeFilters').includes(name)) {
+          this.get('activeFilters').removeObject(name)
+        }
       }
     }
   }

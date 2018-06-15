@@ -48,7 +48,7 @@ ul lh {
 .content {
   display: flex;
   flex-flow: column wrap;
-  min-height: 20vh;
+  min-height: 30vh;
 }
 
 .section > summary {
