@@ -60,6 +60,27 @@ export default Controller.extend({
     this.set('search', value)
   },
 
+  updateNumericFilterObserve(data) {
+    this.get('numericFilters.observe').forEach(pair => {
+      if (pair.includes(data[0])) {
+        this.get('numericFilters.observe').removeObject(pair)
+      }
+    })
+
+    this.get('numericFilters.observe').pushObject(data)
+  },
+
+  setNumericFilters(type, name, value) {
+    if (this.get('numericFilters')[name] === undefined) {
+      set(this.get('numericFilters'), name, type ? ['gt', value] : [value, 0])
+    } else {
+      this.get(`numericFilters.${name}`)[type ? 1 : 0] = value
+    }
+    this.updateNumericFilterObserve(
+      type ? [name, 'gt', value] : [name, value, 0]
+    )
+  },
+
   /*
    * Function for searching out the Filter Name, Filter Category and Category
    * which are defined in the filters Object.
@@ -97,11 +118,30 @@ export default Controller.extend({
 
       if (filterName === 'numeric') {
         Object.entries(this.get('numericFilters')).forEach(numericFilter => {
-          filteredModel = model[category].filter(
-            item =>
-              parseInt(item[filter]) > parseInt(numericFilter[1]) &&
-              item[filter] !== 'unknown'
-          )
+          if (numericFilter[0] !== 'observe') {
+            filteredModel = model[category].filter(item => {
+              if (item[filter] !== 'unknown') {
+                switch (numericFilter[1][0]) {
+                  case 'gt':
+                    return (
+                      parseInt(item[filter]) > parseInt(numericFilter[1][1])
+                    )
+                  case 'eq':
+                    return (
+                      parseInt(item[filter]) === parseInt(numericFilter[1][1])
+                    )
+                  case 'lt':
+                    return (
+                      parseInt(item[filter]) < parseInt(numericFilter[1][1])
+                    )
+                  default:
+                    return (
+                      parseInt(item[filter]) > parseInt(numericFilter[1][1])
+                    )
+                }
+              }
+            })
+          }
         })
       } else {
         filteredModel = model[category].filter(item => {
@@ -122,13 +162,10 @@ export default Controller.extend({
       }
     })
 
-    switch (mode) {
-      case 'model':
-        return resultObj
-      case 'info':
-        return filterInfo
-      default:
-        return resultObj
+    if (mode) {
+      return filterInfo
+    } else {
+      return resultObj
     }
   },
 
@@ -150,7 +187,7 @@ export default Controller.extend({
           let clonedCategories = JSON.parse(
             JSON.stringify(this.get('categorys'))
           ).map(word => word.toLowerCase())
-          resultObj = this.getFilterInfo('model')
+          resultObj = this.getFilterInfo(false)
 
           clonedCategories.forEach((category, index) => {
             if (resultObj.hasOwnProperty(category)) {
@@ -178,7 +215,7 @@ export default Controller.extend({
     toggleCategory(name) {
       name = name.toLowerCase()
       if (this.get(name)) {
-        this.getFilterInfo('info').forEach(filter => {
+        this.getFilterInfo(true).forEach(filter => {
           if (filter[1] === name) {
             this.activeFilters.removeObject(
               filter[0].charAt(0).toUpperCase() + filter[0].slice(1)
@@ -203,24 +240,25 @@ export default Controller.extend({
      * Triggers an update on the Computed Property of filteredModel
      * whenever an number changes, by adding and removing a pair of name and value
      * from numericFilter.observe
+     *
+     * Calls setNumericFilters to achieve numeric filter data mutation
      */
     valChange(name, value) {
       if (value !== '') {
         if (!this.get('activeFilters').includes(name)) {
           this.get('activeFilters').pushObject(name)
         }
-        this.get('numericFilters.observe').forEach(pair => {
-          if (pair.includes(name)) {
-            this.get('numericFilters.observe').removeObject(pair)
-          }
-        })
-        this.get('numericFilters.observe').pushObject([name, value])
-        set(this.get('numericFilters'), name, value)
+        this.setNumericFilters(true, name, value)
       } else {
         if (this.get('activeFilters').includes(name)) {
           this.get('activeFilters').removeObject(name)
         }
       }
+    },
+
+    selectType(type) {
+      let nameTypeArr = type.toLowerCase().split('-')
+      this.setNumericFilters(false, nameTypeArr[0], nameTypeArr[1])
     }
   }
 })

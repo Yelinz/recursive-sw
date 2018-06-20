@@ -6,6 +6,10 @@ export default Component.extend({
       this.get('toggleFilter')(name)
     },
 
+    selectType(value) {
+      this.get('selectType')(value)
+    },
+
     valChange(name, value) {
       this.get('valChange')(name, value)
     }

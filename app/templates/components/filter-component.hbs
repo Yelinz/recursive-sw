@@ -16,6 +16,11 @@
         {{#each filters as |filter|}}
           <label>
             {{filter.name}}:
+            <select onchange={{action 'selectType' value="target.value"}}>
+              <option value="{{filter.name}}-gt" selected>&gt;</option>
+              <option value="{{filter.name}}-eq">=</option>
+              <option value="{{filter.name}}-lt">&lt;</option>
+            </select>
             {{input type="number" min=0 value=filter.value input=(action "valChange" (to-lowercase filter.name) filter.value)}}
           </label>
         {{/each}}

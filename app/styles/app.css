@@ -114,3 +114,8 @@ ul lh {
   display: flex;
   justify-content: flex-start;
 }
+
+.filter-inputs {
+  display: flex;
+  flex-direction: column;
+}
