@@ -16,7 +16,9 @@
       {{filter-component filterCategorys=filters.people toggleFilter=(action "toggleFilter")}}
       <label>
         Height:
-        {{input type="number" min=0 value=value input=(action "valChange" "height" value)}}
+        {{input type="number" min=0 value=heightValue input=(action "valChange" "height" heightValue)}}
+        Weight:
+        {{input type="number" min=0 value=weightValue input=(action "valChange" "mass" weightValue)}}
       </label>
     </details>
     {{/if}}

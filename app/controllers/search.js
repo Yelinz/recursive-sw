@@ -34,7 +34,7 @@ export default Controller.extend({
       people: {
         Gender: ['Male', 'Female', 'Heraphrodite', 'N/a'],
         'Eye Color': ['Blue', 'Brown', 'Orange', 'Hazel', 'Red'],
-        Numeric: ['Height', 'Weight']
+        Numeric: ['Height', 'Mass']
       },
       starships: {
         'Starship Class': ['Starfighter', 'Corvette', 'Star Destroyer']
@@ -85,13 +85,12 @@ export default Controller.extend({
         })
       })
 
-      console.log(filterInfo)
-      if (filter === 'numeric') {
-        Object.entries(this.numericFilters).forEach(numericFilter => {
+      if (filterName === 'numeric') {
+        Object.entries(this.get('numericFilters')).forEach(numericFilter => {
           filteredModel = model[category].filter(
-            item => item > numericFilter[1]
+            item =>
+              item[filter] > numericFilter[1] && item[filter] !== 'unknown'
           )
-          console.log(filteredModel)
         })
       } else {
         filteredModel = model[category].filter(item => {
@@ -103,12 +102,12 @@ export default Controller.extend({
             }
           }
         })
+      }
 
-        if (resultObj[category] === undefined) {
-          resultObj[category] = filteredModel
-        } else {
-          resultObj[category] = resultObj[category].concat(filteredModel)
-        }
+      if (resultObj[category] === undefined) {
+        resultObj[category] = filteredModel
+      } else {
+        resultObj[category] = resultObj[category].concat(filteredModel)
       }
     })
 
@@ -121,9 +120,9 @@ export default Controller.extend({
         return resultObj
     }
   },
-
   filteredModel: computed(
     'activeFilters.[]',
+    'numericFilters.{height,mass}',
     'search',
     'people',
     'starships',
@@ -188,27 +187,15 @@ export default Controller.extend({
 
     valChange(name, value) {
       if (value !== '') {
-        if (!this.get('activeFilters').includes(value)) {
-          this.get('activeFilters').pushObject(value)
+        if (!this.get('activeFilters').includes(name)) {
+          this.get('activeFilters').pushObject(name)
         }
         set(this.get('numericFilters'), name, value)
       } else {
-        if (this.get('activeFilters').includes(value)) {
-          this.get('activeFilters').removeObject(value)
+        if (this.get('activeFilters').includes(name)) {
+          this.get('activeFilters').removeObject(name)
         }
       }
-      /*
-      if (value !== '') {
-        if (!this.get('activeFilters').includes('numeric')) {
-          this.get('activeFilters').pushObject('numeric')
-        }
-        set(this.get('numericFilters'), name, value)
-      } else {
-        if (this.get('activeFilters').includes('numeric')) {
-          this.get('activeFilters').removeObject('numeric')
-        }
-      }
-      */
     }
   }
 })
