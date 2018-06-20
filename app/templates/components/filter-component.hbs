@@ -2,14 +2,25 @@
 {{#each-in filterCategorys as |name filters|}}
   <div class="filter-category">
     <p>{{name}}</p>
-    <div class="filter-checkboxes">
-    {{#each filters as |filter|}}
-      <label>
-        <input type="checkbox" onclick={{action 'toggleFilter' filter}} checked={{filter.checked}}/>
-        {{filter}}
-      </label>
-    {{/each}}
-    </div>
+    {{#if (neq name "Numeric")}}
+      <div class="filter-checkboxes">
+      {{#each filters as |filter|}}
+        <label>
+          <input type="checkbox" onclick={{action "toggleFilter" filter}} checked={{filter.checked}}/>
+          {{filter}}
+        </label>
+      {{/each}}
+      </div>
+    {{else}}
+      <div class="filter-inputs">
+        {{#each filters as |filter|}}
+          <label>
+            {{filter.name}}:
+            {{input type="number" min=0 value=filter.value input=(action "valChange" (to-lowercase filter.name) filter.value)}}
+          </label>
+        {{/each}}
+      </div>
+    {{/if}}
   </div>
 {{/each-in}}
 </div>

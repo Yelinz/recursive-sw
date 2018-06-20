@@ -13,13 +13,15 @@
     {{#if people}}
     <details class="filter people" id="filter-people">
       <summary>People Filter</summary>
-      {{filter-component filterCategorys=filters.people toggleFilter=(action "toggleFilter")}}
+      {{filter-component filterCategorys=filters.people toggleFilter=(action "toggleFilter") valChange=(action "valChange")}}
+      {{!--
       <label>
         Height:
         {{input type="number" min=0 value=heightValue input=(action "valChange" "height" heightValue)}}
         Weight:
         {{input type="number" min=0 value=weightValue input=(action "valChange" "mass" weightValue)}}
       </label>
+      --}}
     </details>
     {{/if}}
     {{#if starships}}
