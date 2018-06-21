@@ -94,7 +94,7 @@ ul lh {
 }
 
 .filter {
-  margin: 5vh 3vw;
+  margin: 3vh 1vw;
   width: 300px;
 }
 
@@ -118,4 +118,18 @@ ul lh {
 .filter-inputs {
   display: flex;
   flex-direction: column;
+}
+
+.filter-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  max-width: 300px;
+}
+
+.filter-input p {
+  display: inline;
+  margin: 0 5px 0 0;
+  padding-top: 5px;
+  width: 60px;
 }

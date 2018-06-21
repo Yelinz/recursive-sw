@@ -14,15 +14,15 @@
     {{else}}
       <div class="filter-inputs">
         {{#each filters as |filter|}}
-          <label>
-            {{filter.name}}:
+          <div class="filter-input">
+            <p>{{filter.name}}:</p>
             <select onchange={{action 'selectType' value="target.value"}}>
               <option value="{{filter.name}}-gt" selected>&gt;</option>
               <option value="{{filter.name}}-eq">=</option>
               <option value="{{filter.name}}-lt">&lt;</option>
             </select>
             {{input type="number" min=0 value=filter.value input=(action "valChange" (to-lowercase filter.name) filter.value)}}
-          </label>
+          </div>
         {{/each}}
       </div>
     {{/if}}

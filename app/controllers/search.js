@@ -37,7 +37,8 @@ export default Controller.extend({
         Numeric: [{ name: 'Height', value: 0 }, { name: 'Mass', value: 0 }]
       },
       starships: {
-        'Starship Class': ['Starfighter', 'Corvette', 'Star Destroyer']
+        'Starship Class': ['Starfighter', 'Corvette', 'Star Destroyer'],
+        Numeric: [{ name: 'Crew', value: 0 }, { name: 'Length', value: 0 }]
       },
       vehicles: {
         'Vehicle Class': ['Wheeled', 'Repulsorcraft', 'Starfighter']
@@ -74,7 +75,7 @@ export default Controller.extend({
     if (this.get('numericFilters')[name] === undefined) {
       set(this.get('numericFilters'), name, type ? ['gt', value] : [value, 0])
     } else {
-      this.get(`numericFilters.${name}`)[type ? 1 : 0] = value
+      this.get(`numericFilters.${name}`)[type] = value
     }
     this.updateNumericFilterObserve(
       type ? [name, 'gt', value] : [name, value, 0]
@@ -85,12 +86,12 @@ export default Controller.extend({
    * Function for searching out the Filter Name, Filter Category and Category
    * which are defined in the filters Object.
    *
-   * Returns the information or the filtered model
+   * Returns information about the filters or the filtered model
    */
   getFilterInfo(mode) {
     let filter,
       category,
-      filterName,
+      filterCategory,
       filteredModel,
       resultObj = {},
       filterInfo = [],
@@ -99,73 +100,75 @@ export default Controller.extend({
       filterInfo[index] = []
       filter = name.toLowerCase()
       filterInfo[index].push(filter)
-      Object.entries(this.get('filters')).forEach(filterCategory => {
-        Object.entries(filterCategory[1]).forEach(filters => {
-          filters[1].forEach(name => {
+      Object.entries(this.get('filters')).forEach(categoryFilter => {
+        Object.entries(categoryFilter[1]).forEach(filters => {
+          filters[1].forEach(filterName => {
             if (
-              (typeof name === 'string'
-                ? name.toLowerCase()
-                : name.name.toLowerCase()) === filter
+              (typeof filterName === 'string'
+                ? filterName.toLowerCase()
+                : filterName.name.toLowerCase()) === filter
             ) {
-              category = filterCategory[0]
-              filterName = filters[0].replace(/ /g, '_').toLowerCase()
+              category = categoryFilter[0]
+              filterCategory = filters[0].replace(/ /g, '_').toLowerCase()
               filterInfo[index].push(category)
-              filterInfo[index].push(filterName)
+              filterInfo[index].push(filterCategory)
             }
           })
         })
       })
 
-      if (filterName === 'numeric') {
-        Object.entries(this.get('numericFilters')).forEach(numericFilter => {
-          if (numericFilter[0] !== 'observe') {
-            filteredModel = model[category].filter(item => {
-              if (item[filter] !== 'unknown') {
-                switch (numericFilter[1][0]) {
-                  case 'gt':
-                    return (
-                      parseInt(item[filter]) > parseInt(numericFilter[1][1])
-                    )
-                  case 'eq':
-                    return (
-                      parseInt(item[filter]) === parseInt(numericFilter[1][1])
-                    )
-                  case 'lt':
-                    return (
-                      parseInt(item[filter]) < parseInt(numericFilter[1][1])
-                    )
-                  default:
-                    return (
-                      parseInt(item[filter]) > parseInt(numericFilter[1][1])
-                    )
+      if (mode) {
+        if (filterCategory === 'numeric') {
+          Object.entries(this.get('numericFilters')).forEach(numericFilter => {
+            if (numericFilter[0] !== 'observe') {
+              filteredModel = model[category].filter(item => {
+                if (item[filter] !== 'unknown') {
+                  switch (numericFilter[1][0]) {
+                    case 'gt':
+                      return (
+                        parseInt(item[filter]) > parseInt(numericFilter[1][1])
+                      )
+                    case 'eq':
+                      return (
+                        parseInt(item[filter]) === parseInt(numericFilter[1][1])
+                      )
+                    case 'lt':
+                      return (
+                        parseInt(item[filter]) < parseInt(numericFilter[1][1])
+                      )
+                    default:
+                      return (
+                        parseInt(item[filter]) > parseInt(numericFilter[1][1])
+                      )
+                  }
                 }
-              }
-            })
-          }
-        })
-      } else {
-        filteredModel = model[category].filter(item => {
-          if (item[filterName] === filter) {
-            return true
-          } else {
-            if (filterName !== 'gender') {
-              return item[filterName].includes(filter)
+              })
             }
-          }
-        })
-      }
+          })
+        } else {
+          filteredModel = model[category].filter(item => {
+            if (item[filterCategory] === filter) {
+              return true
+            } else {
+              if (filterCategory !== 'gender') {
+                return item[filterCategory].includes(filter)
+              }
+            }
+          })
+        }
 
-      if (resultObj[category] === undefined) {
-        resultObj[category] = filteredModel
-      } else {
-        resultObj[category] = resultObj[category].concat(filteredModel)
+        if (resultObj[category] === undefined) {
+          resultObj[category] = filteredModel
+        } else {
+          resultObj[category] = resultObj[category].concat(filteredModel)
+        }
       }
     })
 
     if (mode) {
-      return filterInfo
-    } else {
       return resultObj
+    } else {
+      return filterInfo
     }
   },
 
@@ -187,7 +190,7 @@ export default Controller.extend({
           let clonedCategories = JSON.parse(
             JSON.stringify(this.get('categorys'))
           ).map(word => word.toLowerCase())
-          resultObj = this.getFilterInfo(false)
+          resultObj = this.getFilterInfo(true)
 
           clonedCategories.forEach((category, index) => {
             if (resultObj.hasOwnProperty(category)) {
@@ -215,7 +218,7 @@ export default Controller.extend({
     toggleCategory(name) {
       name = name.toLowerCase()
       if (this.get(name)) {
-        this.getFilterInfo(true).forEach(filter => {
+        this.getFilterInfo(false).forEach(filter => {
           if (filter[1] === name) {
             this.activeFilters.removeObject(
               filter[0].charAt(0).toUpperCase() + filter[0].slice(1)
@@ -244,21 +247,21 @@ export default Controller.extend({
      * Calls setNumericFilters to achieve numeric filter data mutation
      */
     valChange(name, value) {
-      if (value !== '') {
-        if (!this.get('activeFilters').includes(name)) {
-          this.get('activeFilters').pushObject(name)
-        }
-        this.setNumericFilters(true, name, value)
-      } else {
+      if (value === '') {
         if (this.get('activeFilters').includes(name)) {
           this.get('activeFilters').removeObject(name)
         }
+      } else {
+        if (!this.get('activeFilters').includes(name)) {
+          this.get('activeFilters').pushObject(name)
+        }
+        this.setNumericFilters(1, name, value)
       }
     },
 
     selectType(type) {
       let nameTypeArr = type.toLowerCase().split('-')
-      this.setNumericFilters(false, nameTypeArr[0], nameTypeArr[1])
+      this.setNumericFilters(0, nameTypeArr[0], nameTypeArr[1])
     }
   }
 })

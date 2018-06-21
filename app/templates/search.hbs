@@ -13,37 +13,37 @@
     {{#if people}}
     <details class="filter people" id="filter-people">
       <summary>People Filter</summary>
-      {{filter-component filterCategorys=filters.people toggleFilter=(action "toggleFilter") valChange=(action "valChange") selectType=(action "selectType")}}
+      {{filter-component filterCategorys=filters.people toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
     </details>
     {{/if}}
     {{#if starships}}
     <details class="filter starships" id="filter-starships">
       <summary>Starships Filter</summary>
-      {{filter-component filterCategorys=filters.starships toggleFilter=(action "toggleFilter")}}
+      {{filter-component filterCategorys=filters.starships toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
     </details>
     {{/if}}
     {{#if vehicles}}
     <details class="filter vehicles" id="filter-vehicles">
       <summary>Vehicles Filter</summary>
-      {{filter-component filterCategorys=filters.vehicles toggleFilter=(action "toggleFilter")}}
+      {{filter-component filterCategorys=filters.vehicles toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
     </details>
     {{/if}}
     {{#if species}}
     <details class="filter species" id="filter-species">
       <summary>Species Filter</summary>
-      {{filter-component filterCategorys=filters.species toggleFilter=(action "toggleFilter")}}
+      {{filter-component filterCategorys=filters.species toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
     </details>
     {{/if}}
     {{#if planets}}
     <details class="filter planets" id="filter-planets">
       <summary>Planets Filter</summary>
-      {{filter-component filterCategorys=filters.planets toggleFilter=(action "toggleFilter")}}
+      {{filter-component filterCategorys=filters.planets toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
     </details>
     {{/if}}
     {{#if films}}
     <details class="filter films" id="filter-films">
       <summary>Films Filter</summary>
-      {{filter-component filterCategorys=filters.films toggleFilter=(action "toggleFilter")}}
+      {{filter-component filterCategorys=filters.films toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
     </details>
     {{/if}}
   </div>
