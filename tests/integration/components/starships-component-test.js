@@ -1,18 +1,18 @@
-import { module, /* test*/ skip } from "qunit"
-import { setupRenderingTest } from "ember-qunit"
-import { render } from "@ember/test-helpers"
-import hbs from "htmlbars-inline-precompile"
+import { module, test } from 'qunit'
+import { setupRenderingTest } from 'ember-qunit'
+import { render } from '@ember/test-helpers'
+import hbs from 'htmlbars-inline-precompile'
 
-module("Integration | Component | starships-component", function(hooks) {
+module('Integration | Component | starships-component', function(hooks) {
   setupRenderingTest(hooks)
 
-  skip("it renders", async function(assert) {
+  test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
     await render(hbs`{{starships-component}}`)
 
-    assert.equal(this.element.textContent.trim(), "")
+    assert.equal(this.element.textContent.trim(), 'No Starships')
 
     // Template block usage:
     await render(hbs`
@@ -21,6 +21,6 @@ module("Integration | Component | starships-component", function(hooks) {
       {{/starships-component}}
     `)
 
-    assert.equal(this.element.textContent.trim(), "")
+    assert.equal(this.element.textContent.trim(), 'No Starships')
   })
 })

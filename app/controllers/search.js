@@ -32,7 +32,7 @@ export default Controller.extend({
     ])
     this.set('filters', {
       people: {
-        Gender: ['Male', 'Female', 'Heraphrodite', 'N/a'],
+        Gender: ['Male', 'Female', 'Hermaphrodite', 'N/a'],
         'Eye Color': ['Blue', 'Brown', 'Orange', 'Hazel', 'Red'],
         Numeric: [{ name: 'Height', value: 0 }, { name: 'Mass', value: 0 }]
       },
@@ -53,7 +53,7 @@ export default Controller.extend({
         Producer: ['Rick McCallum', 'George Lucas', 'Gray Krutz']
       }
     })
-    this.set('activeFilters', [])
+    this.set('activeFilters', { normal: [], numeric: [] })
     this.set('numericFilters', { observe: [] })
   },
 
@@ -89,81 +89,67 @@ export default Controller.extend({
    * Returns information about the filters or the filtered model
    */
   getFilterInfo(mode) {
-    let filter,
-      category,
-      filterCategory,
-      filteredModel,
-      resultObj = {},
+    let resultObj = {},
       filterInfo = [],
       model = this.get('model')
-    this.get('activeFilters').forEach((name, index) => {
-      filterInfo[index] = []
-      filter = name.toLowerCase()
-      filterInfo[index].push(filter)
-      Object.entries(this.get('filters')).forEach(categoryFilter => {
-        Object.entries(categoryFilter[1]).forEach(filters => {
-          filters[1].forEach(filterName => {
-            if (
-              (typeof filterName === 'string'
-                ? filterName.toLowerCase()
-                : filterName.name.toLowerCase()) === filter
-            ) {
-              category = categoryFilter[0]
-              filterCategory = filters[0].replace(/ /g, '_').toLowerCase()
-              filterInfo[index].push(category)
-              filterInfo[index].push(filterCategory)
-            }
+    Object.values(this.get('activeFilters')).forEach(
+      (filterType, type, activeFilterArr) => {
+        let filter, category, filterCategory, filteredModel
+        filterType.forEach((name, index, filterArr) => {
+          filter = name.toLowerCase()
+          Object.entries(this.get('filters')).forEach(categoryFilter => {
+            Object.entries(categoryFilter[1]).forEach(filters => {
+              filters[1].forEach(filterName => {
+                if (
+                  (typeof filterName === 'string'
+                    ? filterName.toLowerCase()
+                    : filterName.name.toLowerCase()) === filter
+                ) {
+                  category = categoryFilter[0]
+                  filterCategory = filters[0].replace(/ /g, '_').toLowerCase()
+                  filterInfo[index] = [filter, category, filterCategory]
+                }
+              })
+            })
           })
-        })
-      })
 
-      if (mode) {
-        if (filterCategory === 'numeric') {
-          Object.entries(this.get('numericFilters')).forEach(numericFilter => {
-            if (numericFilter[0] !== 'observe') {
-              filteredModel = model[category].filter(item => {
-                if (item[filter] !== 'unknown') {
-                  switch (numericFilter[1][0]) {
+          if (mode) {
+            if (resultObj[category] === undefined) resultObj[category] = []
+            if (!type && filterArr.length) {
+              filteredModel = model[category].filter(modelEntry => {
+                if (modelEntry[filterCategory] === filter) {
+                  return true
+                } else if (filterCategory !== 'gender') {
+                  return modelEntry[filterCategory].includes(filter)
+                } else {
+                  return false
+                }
+              })
+              resultObj[category] = resultObj[category].concat(filteredModel)
+            } else {
+              let obj = resultObj[category].length
+                ? resultObj[category]
+                : model[category]
+              filteredModel = obj.filter(objEntry => {
+                let num = parseInt(objEntry[filter])
+                let numericFilter = this.get(`numericFilters.${filter}`)
+                if (objEntry[filter] !== 'unkown') {
+                  switch (numericFilter[0]) {
                     case 'gt':
-                      return (
-                        parseInt(item[filter]) > parseInt(numericFilter[1][1])
-                      )
+                      return num > parseInt(numericFilter[1])
                     case 'eq':
-                      return (
-                        parseInt(item[filter]) === parseInt(numericFilter[1][1])
-                      )
+                      return num === parseInt(numericFilter[1])
                     case 'lt':
-                      return (
-                        parseInt(item[filter]) < parseInt(numericFilter[1][1])
-                      )
-                    default:
-                      return (
-                        parseInt(item[filter]) > parseInt(numericFilter[1][1])
-                      )
+                      return num < parseInt(numericFilter[1])
                   }
                 }
               })
+              resultObj[category] = filteredModel || []
             }
-          })
-        } else {
-          filteredModel = model[category].filter(item => {
-            if (item[filterCategory] === filter) {
-              return true
-            } else {
-              if (filterCategory !== 'gender') {
-                return item[filterCategory].includes(filter)
-              }
-            }
-          })
-        }
-
-        if (resultObj[category] === undefined) {
-          resultObj[category] = filteredModel
-        } else {
-          resultObj[category] = resultObj[category].concat(filteredModel)
-        }
+          }
+        })
       }
-    })
+    )
 
     if (mode) {
       return resultObj
@@ -173,7 +159,7 @@ export default Controller.extend({
   },
 
   filteredModel: computed(
-    'activeFilters.[]',
+    'activeFilters.{normal,numeric}.[]',
     'numericFilters.observe.[]',
     'search',
     'people',
@@ -186,7 +172,10 @@ export default Controller.extend({
       get() {
         let model = this.get('model'),
           resultObj = {}
-        if (this.get('activeFilters').length) {
+        if (
+          this.get('activeFilters.normal').length ||
+          this.get('activeFilters.numeric').length
+        ) {
           let clonedCategories = JSON.parse(
             JSON.stringify(this.get('categorys'))
           ).map(word => word.toLowerCase())
@@ -230,10 +219,10 @@ export default Controller.extend({
     },
 
     toggleFilter(name) {
-      if (this.get('activeFilters').includes(name)) {
-        this.get('activeFilters').removeObject(name)
+      if (this.get('activeFilters.normal').includes(name)) {
+        this.get('activeFilters.normal').removeObject(name)
       } else {
-        this.get('activeFilters').pushObject(name)
+        this.get('activeFilters.normal').pushObject(name)
       }
     },
 
@@ -248,12 +237,12 @@ export default Controller.extend({
      */
     valChange(name, value) {
       if (value === '') {
-        if (this.get('activeFilters').includes(name)) {
-          this.get('activeFilters').removeObject(name)
+        if (this.get('activeFilters.numeric').includes(name)) {
+          this.get('activeFilters.numeric').removeObject(name)
         }
       } else {
-        if (!this.get('activeFilters').includes(name)) {
-          this.get('activeFilters').pushObject(name)
+        if (!this.get('activeFilters.numeric').includes(name)) {
+          this.get('activeFilters.numeric').pushObject(name)
         }
         this.setNumericFilters(1, name, value)
       }

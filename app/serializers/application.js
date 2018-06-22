@@ -40,6 +40,12 @@ export default DS.JSONSerializer.extend({
               element[valuePair[0]] = valuePair[1].toLowerCase()
             }
           })
+        } else if (primaryModelClass.modelName === 'people') {
+          Object.entries(element).forEach(valuePair => {
+            if (valuePair[0] === 'mass') {
+              element[valuePair[0]] = valuePair[1].replace(/\,/g, '')
+            }
+          })
         }
       })
       return this._super(store, primaryModelClass, payload.results, id)
