@@ -1,18 +1,18 @@
-import { module, /* test*/ skip } from "qunit"
-import { setupRenderingTest } from "ember-qunit"
-import { render } from "@ember/test-helpers"
-import hbs from "htmlbars-inline-precompile"
+import { module, /* test*/ skip } from 'qunit'
+import { setupRenderingTest } from 'ember-qunit'
+import { render } from '@ember/test-helpers'
+import hbs from 'htmlbars-inline-precompile'
 
-module("Integration | Component | people-component", function(hooks) {
+module('Integration | Component | people-component', function(hooks) {
   setupRenderingTest(hooks)
 
-  skip("it renders", async function(assert) {
+  skip('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
     await render(hbs`{{people-component}}`)
 
-    assert.equal(this.element.textContent.trim(), "")
+    assert.equal(this.element.textContent.trim(), '')
 
     // Template block usage:
     await render(hbs`
@@ -21,6 +21,6 @@ module("Integration | Component | people-component", function(hooks) {
       {{/people-component}}
     `)
 
-    assert.equal(this.element.textContent.trim(), "")
+    assert.equal(this.element.textContent.trim(), '')
   })
 })
