@@ -43,7 +43,7 @@ export default DS.JSONSerializer.extend({
         } else if (primaryModelClass.modelName === 'people') {
           Object.entries(element).forEach(valuePair => {
             if (valuePair[0] === 'mass') {
-              element[valuePair[0]] = valuePair[1].replace(/\,/g, '')
+              element[valuePair[0]] = valuePair[1].replace(/,/g, '')
             }
           })
         }
