@@ -7,6 +7,7 @@ import {
   getProperties,
   set
 } from '@ember/object'
+import MutableArray from '@ember/array/mutable'
 
 export default Controller.extend({
   queryParams: [
@@ -16,7 +17,8 @@ export default Controller.extend({
     'vehicles',
     'species',
     'planets',
-    'films'
+    'films',
+    'selectedFilters'
   ],
   search: '',
   people: true,
@@ -78,6 +80,7 @@ export default Controller.extend({
     this.set('numericFilters', {
       observe: []
     })
+    this.set('selectedFilters', [])
   },
 
   debounceSearch(value) {
@@ -198,16 +201,18 @@ export default Controller.extend({
           this.get('activeFilters.normal').length ||
           this.get('activeFilters.numeric').length
         ) {
+          resultObj = this.getFilterInfo(true)
+
           let clonedCategories = JSON.parse(
             JSON.stringify(this.get('categorys'))
           ).map(word => word.toLowerCase())
-          resultObj = this.getFilterInfo(true)
 
           clonedCategories.forEach((category, index) => {
             if (resultObj.hasOwnProperty(category)) {
               clonedCategories.splice(index, 1)
             }
           })
+
           resultObj = Object.assign({},
             resultObj,
             getProperties(model, clonedCategories)
@@ -219,6 +224,40 @@ export default Controller.extend({
       }
     }
   ),
+
+  queryParamFilters: computed(
+    'activeFilters.{normal,numeric}.[]',
+    'numericFilters.observe.[]', {
+      get() {
+        let returnArr
+        if (this.get('activeFilters.normal').length) {
+          returnArr = []
+        } else {
+          returnArr = this.get("selectedFilters")
+        }
+        const filterInfo = this.getFilterInfo(false)
+        Object.values(this.get('filters')).forEach(filter => {
+          Object.values(filter).forEach(nameArr => {
+            nameArr.forEach(filterName => {
+              filterInfo.forEach(infoArr => {
+                if (infoArr[0] === (typeof filterName === 'string' ?
+                    filterName.toLowerCase() :
+                    filterName.name.toLowerCase())) {
+                  if (typeof filterName === 'string') {
+                    returnArr.push(filterName)
+                  }
+                }
+              })
+            })
+          })
+        })
+        returnArr.forEach(name => {
+          this.get('activeFilters.normal').addObject(name)
+        })
+        this.get("selectedFilters").setObjects(returnArr)
+        return returnArr
+      }
+    }),
 
   actions: {
     handleSearch(value) {
@@ -257,7 +296,7 @@ export default Controller.extend({
      * Calls setNumericFilters to achieve numeric filter data mutation
      */
     valChange(name, value) {
-      if (value === '') {
+      if (value === '' || value === '0') {
         if (this.get('activeFilters.numeric').includes(name)) {
           this.get('activeFilters.numeric').removeObject(name)
         }

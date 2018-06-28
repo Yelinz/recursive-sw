@@ -6,7 +6,7 @@
       <div class="filter-checkboxes">
       {{#each filters as |filter|}}
         <label>
-          <input type="checkbox" onclick={{action "toggleFilter" filter}} checked={{filter.checked}}/>
+          <input type="checkbox" onclick={{action "toggleFilter" filter}} checked={{in-array queryParameter filter}}/>
           {{filter}}
         </label>
       {{/each}}
