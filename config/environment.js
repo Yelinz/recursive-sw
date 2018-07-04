@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = function(environment) {
   let ENV = {
@@ -18,10 +18,57 @@ module.exports = function(environment) {
     },
 
     APP: {
-      // Here you can pass flags/options to your application instance
-      // when it is created
+      categorys: [
+        'People',
+        'Starships',
+        'Vehicles',
+        'Species',
+        'Planets',
+        'Films'
+      ],
+      filters: {
+        people: {
+          Gender: ['Male', 'Female', 'Hermaphrodite', 'N/a'],
+          'Eye Color': ['Blue', 'Brown', 'Orange', 'Hazel', 'Red'],
+          Numeric: [
+            {
+              name: 'Height',
+              value: 0
+            },
+            {
+              name: 'Mass',
+              value: 0
+            }
+          ]
+        },
+        starships: {
+          'Starship Class': ['Starfighter', 'Corvette', 'Star Destroyer'],
+          Numeric: [
+            {
+              name: 'Crew',
+              value: 0
+            },
+            {
+              name: 'Length',
+              value: 0
+            }
+          ]
+        },
+        vehicles: {
+          'Vehicle Class': ['Wheeled', 'Repulsorcraft', 'Starfighter']
+        },
+        species: {
+          Classification: ['Mammal', 'Artificial', 'Unknown', 'Reptile']
+        },
+        planets: {
+          Terrain: ['Desert', 'Grasslands', 'Mountains', 'Jungles', 'Ocean']
+        },
+        films: {
+          Producer: ['Rick McCallum', 'George Lucas', 'Gray Krutz']
+        }
+      }
     }
-  };
+  }
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
@@ -33,19 +80,19 @@ module.exports = function(environment) {
 
   if (environment === 'test') {
     // Testem prefers this...
-    ENV.locationType = 'none';
+    ENV.locationType = 'none'
 
     // keep test console output quieter
-    ENV.APP.LOG_ACTIVE_GENERATION = false;
-    ENV.APP.LOG_VIEW_LOOKUPS = false;
+    ENV.APP.LOG_ACTIVE_GENERATION = false
+    ENV.APP.LOG_VIEW_LOOKUPS = false
 
-    ENV.APP.rootElement = '#ember-testing';
-    ENV.APP.autoboot = false;
+    ENV.APP.rootElement = '#ember-testing'
+    ENV.APP.autoboot = false
   }
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
   }
 
-  return ENV;
-};
+  return ENV
+}
