@@ -73,7 +73,7 @@ export default Controller.extend({
       filterInfo = [],
       model = this.model
     Object.values(this.activeFilters).forEach((filterType, type) => {
-      let filter, category, filterCategory, filteredModel
+      let filter, category, filterCategory
       let potentialResult = true
       filterType.forEach(name => {
         filter = name.toLowerCase()
@@ -252,9 +252,22 @@ export default Controller.extend({
             this.get('activeFilters.normal').removeObject(
               filter[0].capitalize()
             )
-          } else {
+            this.selectedFilters.removeObject(filter[0].capitalize())
+          } else if (filter[1] === name && filter[2] === 'numeric') {
             this.get('activeFilters.numeric').removeObject(filter[0])
+            delete this.get('numericFilters')[filter[0]]
+            this.get('numericFilters.observe').forEach(arr => {
+              if (arr[0] === filter[0]) {
+                this.get('numericFilters.observe').removeObject(arr)
+              }
+            })
+            this.selectedFilters.forEach(item => {
+              if (typeof item === 'object') {
+                this.selectedFilters.removeObject(item)
+              }
+            })
           }
+          console.log(this.selectedFilters)
         })
       }
       this.toggleProperty(name)
