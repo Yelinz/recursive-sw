@@ -97,8 +97,11 @@ export default Controller.extend({
 
         if (mode) {
           if (resultObj[category] === undefined) resultObj[category] = []
+          let obj = resultObj[category].length
+            ? resultObj[category]
+            : model[category]
           if (!type && filterType.length) {
-            filteredModel = model[category].filter(modelEntry => {
+            resultObj[category] = obj.filter(modelEntry => {
               if (modelEntry[filterCategory] === filter) {
                 return true
               } else if (filterCategory !== 'gender') {
@@ -107,12 +110,8 @@ export default Controller.extend({
                 return false
               }
             })
-            resultObj[category] = resultObj[category].concat(filteredModel)
-          } else if (potentialResult && filterType.length) {
-            let obj = resultObj[category].length
-              ? resultObj[category]
-              : model[category]
-            filteredModel = obj.filter(objEntry => {
+          } else if (type && potentialResult && filterType.length) {
+            resultObj[category] = obj.filter(objEntry => {
               let num = parseInt(objEntry[filter])
               let numericFilter = this.get(`numericFilters.${filter}`)
               if (objEntry[filter] !== 'unkown') {
@@ -126,8 +125,7 @@ export default Controller.extend({
                 }
               }
             })
-            if (filteredModel.length === 0) potentialResult = false
-            resultObj[category] = filteredModel
+            if (resultObj[category].length === 0) potentialResult = false
           }
         }
       })
