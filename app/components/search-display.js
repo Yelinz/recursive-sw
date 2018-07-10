@@ -31,7 +31,7 @@ export default Component.extend({
             })
           } else if (potentialResult && filterCategory === 'numeric') {
             resultObj[category] = model.filter(obj => {
-              if (obj[filter] !== 'unkown') {
+              if (obj[filter] !== 'unknown') {
                 let num = parseInt(obj[filter])
                 let numericFilter = this.selectedFilters.find(
                   e => e[0] === filter

@@ -18,7 +18,7 @@ module.exports = function(environment) {
     },
 
     APP: {
-      categorys: [
+      categories: [
         'People',
         'Starships',
         'Vehicles',

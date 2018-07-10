@@ -11,10 +11,9 @@ module('Integration | Component | filter-component', function(hooks) {
     this.set('queryParameters', [])
     this.set('filters', ENV.APP.filters.people)
 
-    await render(hbs`{{filter-component
-      filterCategorys=filters
-      queryParameter=queryParameters}}
-      `)
+    await render(
+      hbs`{{filter-component filterCategorys=filters queryParameter=queryParameters}} `
+    )
 
     assert.notEqual(this.element.textContent.trim(), '')
   })

@@ -3,21 +3,29 @@ import Component from '@ember/component'
 export default Component.extend({
   init() {
     this._super(...arguments)
-    this.set(
-      'filterCategorys.Numeric',
-      this.get('filterCategorys.Numeric').map(name => {
-        return { name: name, type: 'gt', value: 0 }
-      })
-    )
-    this.queryParameter.filter(e => typeof e === 'object').forEach(filter => {
-      this.get('filterCategorys.Numeric').any(obj => {
-        if (obj.name.toLowerCase() === filter[0]) {
-          obj.type = filter[1]
-          obj.value = filter[2]
-          return true
+    /*
+     * Sets the Value in the input fields, if it's defined in the queryparamters
+     */
+    if (this.get('filterCategorys.Numeric').every(e => typeof e === 'string')) {
+      this.set(
+        'filterCategorys.Numeric',
+        this.get('filterCategorys.Numeric').map(name => {
+          return { name: name, type: 'gt', value: 0 }
+        })
+      )
+    }
+
+    this.queryParameter
+      .filter(e => typeof e === 'object')
+      .forEach(filterInfo => {
+        let filterValue = this.get('filterCategorys.Numeric').find(
+          obj => obj.name.toLowerCase() === filterInfo[0]
+        )
+        if (filterValue !== undefined) {
+          filterValue.type = filterInfo[1]
+          filterValue.value = filterInfo[2]
         }
       })
-    })
   },
 
   actions: {

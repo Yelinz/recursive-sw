@@ -1,6 +1,7 @@
 import Controller from '@ember/controller'
 import { debounce } from '@ember/runloop'
 import { computed } from '@ember/object'
+import { underscore, capitalize } from '@ember/string'
 import ENV from 'recursive-sw/config/environment'
 
 export default Controller.extend({
@@ -21,8 +22,8 @@ export default Controller.extend({
   species: false,
   planets: false,
   films: false,
-  categorys: ENV.APP.categorys,
-  filters: ENV.APP.filters,
+  categorys: computed(() => ENV.APP.categories),
+  filters: computed(() => ENV.APP.filters),
 
   init() {
     this._super(...arguments)
@@ -39,16 +40,12 @@ export default Controller.extend({
         n ? [name, 'gt', value] : [name, value, '0']
       )
     }
-    this.selectedFilters.any(filter => {
-      if (filter[0] === name) {
-        this.selectedFilters.removeObject(filter)
-        if (value !== '') {
-          filter[n + 1] = value
-          this.selectedFilters.addObject(filter)
-        }
-        return true
-      }
-    })
+    let filter = this.selectedFilters.find(filter => filter[0] === name)
+    this.selectedFilters.removeObject(filter)
+    if (value !== '') {
+      filter[n + 1] = value
+      this.selectedFilters.addObject(filter)
+    }
   },
 
   /*
@@ -60,22 +57,23 @@ export default Controller.extend({
   getFilterInfo(name) {
     let filterInfo = [],
       notSpecific = name === undefined ? true : false
-    this.selectedFilters.forEach(name_ => {
+    this.selectedFilters.forEach(nameSelected => {
       if (notSpecific) {
-        name = (typeof name_ === 'string' ? name_ : name_[0]).toLowerCase()
+        name = (typeof nameSelected === 'string'
+          ? nameSelected
+          : nameSelected[0]
+        ).toLowerCase()
       }
-      Object.entries(this.filters).any(categoryFilter => {
-        return Object.entries(categoryFilter[1]).any(filters => {
-          return filters[1].any(filterName => {
+
+      Object.entries(this.filters).some(categoryFilter => {
+        return Object.entries(categoryFilter[1]).some(filters => {
+          return filters[1].some(filterName => {
             filterName = filterName.name || filterName
-            if (filterName.toLowerCase() === name) {
-              if (filterInfo.every(entry => entry[0] !== name)) {
-                filterInfo.push([
-                  name,
-                  categoryFilter[0],
-                  filters[0].underscore()
-                ])
-              }
+            if (
+              filterName.toLowerCase() === name &&
+              filterInfo.every(entry => entry[0] !== name)
+            ) {
+              filterInfo.push([name, categoryFilter[0], underscore(filters[0])])
               return true
             }
           })
@@ -111,7 +109,7 @@ export default Controller.extend({
       if (this.get(name)) {
         this.getFilterInfo().forEach(filter => {
           if (filter[1] === name && filter[2] !== 'numeric') {
-            this.selectedFilters.removeObject(filter[0].capitalize())
+            this.selectedFilters.removeObject(capitalize(filter[0]))
           } else if (filter[1] === name && filter[2] === 'numeric') {
             this.selectedFilters.forEach(item => {
               if (typeof item === 'object' && filter[0] === item[0]) {
