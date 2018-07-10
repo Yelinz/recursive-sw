@@ -1,6 +1,6 @@
 import Controller from '@ember/controller'
 import { debounce } from '@ember/runloop'
-import { computed } from '@ember/object'
+import EmberObject, { computed } from '@ember/object'
 import { underscore, capitalize } from '@ember/string'
 import ENV from 'recursive-sw/config/environment'
 
@@ -23,11 +23,11 @@ export default Controller.extend({
   planets: false,
   films: false,
   categorys: computed(() => ENV.APP.categories),
-  filters: computed(() => ENV.APP.filters),
 
   init() {
     this._super(...arguments)
     this.set('selectedFilters', [])
+    this.set('filters', EmberObject.create(ENV.APP.filters))
   },
 
   debounceSearch(value) {

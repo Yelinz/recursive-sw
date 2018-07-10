@@ -3,7 +3,6 @@ import Component from '@ember/component'
 export default Component.extend({
   init() {
     this._super(...arguments)
-    this.set('filterCategories', this.get(`filterCategories.${this.name}`))
     /*
      * Sets the Value in the input fields, if it's defined in the queryparamters
      */
