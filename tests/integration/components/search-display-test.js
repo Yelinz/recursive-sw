@@ -3,11 +3,11 @@ import { setupRenderingTest } from 'ember-qunit'
 import { render } from '@ember/test-helpers'
 import hbs from 'htmlbars-inline-precompile'
 
-module('Integration | Component | people-component', function(hooks) {
+module('Integration | Component | search-display', function(hooks) {
   setupRenderingTest(hooks)
 
   test('it renders', async function(assert) {
-    await render(hbs`{{people-component}}`)
-    assert.equal(this.element.textContent.trim(), 'No People')
+    await render(hbs`{{search-display}}`)
+    assert.equal(this.element.textContent.trim(), '')
   })
 })

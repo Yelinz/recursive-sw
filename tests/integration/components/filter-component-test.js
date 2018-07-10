@@ -2,25 +2,20 @@ import { module, test } from 'qunit'
 import { setupRenderingTest } from 'ember-qunit'
 import { render } from '@ember/test-helpers'
 import hbs from 'htmlbars-inline-precompile'
+import ENV from 'recursive-sw/config/environment'
 
 module('Integration | Component | filter-component', function(hooks) {
   setupRenderingTest(hooks)
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+    this.set('queryParameters', [])
+    this.set('filters', ENV.APP.filters.people)
 
-    await render(hbs`{{filter-component}}`)
+    await render(hbs`{{filter-component
+      filterCategorys=filters
+      queryParameter=queryParameters}}
+      `)
 
-    assert.equal(this.element.textContent.trim(), '')
-
-    // Template block usage:
-    await render(hbs`
-      {{#filter-component}}
-        template block text
-      {{/filter-component}}
-    `)
-
-    assert.equal(this.element.textContent.trim(), '')
+    assert.notEqual(this.element.textContent.trim(), '')
   })
 })
