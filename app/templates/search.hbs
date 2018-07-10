@@ -7,8 +7,9 @@
     <details class="filter people" id="filter-people">
       <summary>People Filter</summary>
       {{filter-component
-        filterCategorys=filters.people
+        filterCategories=filters
         queryParameter=selectedFilters
+        name="people"
         toggleFilter=(action "toggleFilter")
         selectType=(action "selectType")
         valChange=(action "valChange")}}
@@ -18,8 +19,9 @@
     <details class="filter starships" id="filter-starships">
       <summary>Starships Filter</summary>
       {{filter-component
-        filterCategorys=filters.starships
+        filterCategories=filters
         queryParameter=selectedFilters
+        name="starships"
         toggleFilter=(action "toggleFilter")
         selectType=(action "selectType")
         valChange=(action "valChange")}}
@@ -29,8 +31,9 @@
     <details class="filter vehicles" id="filter-vehicles">
       <summary>Vehicles Filter</summary>
       {{filter-component
-        filterCategorys=filters.vehicles
+        filterCategories=filters
         queryParameter=selectedFilters
+        name="vehicles"
         toggleFilter=(action "toggleFilter")
         selectType=(action "selectType")
         valChange=(action "valChange")}}
@@ -40,8 +43,9 @@
     <details class="filter species" id="filter-species">
       <summary>Species Filter</summary>
       {{filter-component
-        filterCategorys=filters.species
+        filterCategories=filters
         queryParameter=selectedFilters
+        name="species"
         toggleFilter=(action "toggleFilter")
         selectType=(action "selectType")
         valChange=(action "valChange")}}
@@ -51,8 +55,9 @@
     <details class="filter planets" id="filter-planets">
       <summary>Planets Filter</summary>
       {{filter-component
-        filterCategorys=filters.planets
+        filterCategories=filters
         queryParameter=selectedFilters
+        name="planets"
         toggleFilter=(action "toggleFilter")
         selectType=(action "selectType")
         valChange=(action "valChange")}}
@@ -62,8 +67,9 @@
     <details class="filter films" id="filter-films">
       <summary>Films Filter</summary>
       {{filter-component
-        filterCategorys=filters.films
+        filterCategories=filters
         queryParameter=selectedFilters
+        name="films"
         toggleFilter=(action "toggleFilter")
         selectType=(action "selectType")
         valChange=(action "valChange")}}
