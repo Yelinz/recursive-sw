@@ -1,0 +1,11 @@
+<div class="checkboxes">
+{{#each-in categories as |category value|}}
+  <label>
+  <input
+   type="checkbox"
+   onclick={{action 'toggleCategory' category}}
+   checked={{value}}/>
+  {{category}}
+  </label>
+{{/each-in}}
+</div>

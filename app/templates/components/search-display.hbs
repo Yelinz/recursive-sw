@@ -1,0 +1,41 @@
+{{#if model.people}}
+<details open class="section people">
+  <summary>People</summary>
+  {{people-component people=filteredModel.people}}
+</details>
+{{/if}}
+
+{{#if model.starships}}
+<details class="section starships">
+  <summary>Starships</summary>
+  {{starships-component starships=filteredModel.starships}}
+</details>
+{{/if}}
+
+{{#if model.vehicles}}
+<details class="section vehicles">
+  <summary>Vehicles</summary>
+  {{vehicles-component vehicles=filteredModel.vehicles}}
+</details>
+{{/if}}
+
+{{#if model.species}}
+<details class="section species">
+  <summary>Species</summary>
+  {{species-component species=filteredModel.species}}
+</details>
+{{/if}}
+
+{{#if model.planets}}
+<details class="section planets">
+  <summary>Planets</summary>
+    {{planets-component planets=filteredModel.planets}}
+</details>
+{{/if}}
+
+{{#if model.films}}
+<details class="section films">
+  <summary>Films</summary>
+  {{films-component films=filteredModel.films}}
+</details>
+{{/if}}

@@ -30,29 +30,11 @@ module.exports = function(environment) {
         people: {
           Gender: ['Male', 'Female', 'Hermaphrodite', 'N/a'],
           'Eye Color': ['Blue', 'Brown', 'Orange', 'Hazel', 'Red'],
-          Numeric: [
-            {
-              name: 'Height',
-              value: 0
-            },
-            {
-              name: 'Mass',
-              value: 0
-            }
-          ]
+          Numeric: ['Height', 'Mass']
         },
         starships: {
           'Starship Class': ['Starfighter', 'Corvette', 'Star Destroyer'],
-          Numeric: [
-            {
-              name: 'Crew',
-              value: 0
-            },
-            {
-              name: 'Length',
-              value: 0
-            }
-          ]
+          Numeric: ['Crew', 'Length']
         },
         vehicles: {
           'Vehicle Class': ['Wheeled', 'Repulsorcraft', 'Starfighter']
