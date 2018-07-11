@@ -22,7 +22,6 @@ export default Controller.extend({
   species: false,
   planets: false,
   films: false,
-  categorys: computed(() => ENV.APP.categories),
 
   init() {
     this._super(...arguments)
@@ -65,7 +64,7 @@ export default Controller.extend({
         ).toLowerCase()
       }
 
-      Object.entries(this.filters).some(categoryFilter => {
+      Object.entries(ENV.APP.filters).some(categoryFilter => {
         return Object.entries(categoryFilter[1]).some(filters => {
           return filters[1].some(filterName => {
             filterName = filterName.name || filterName
@@ -92,7 +91,7 @@ export default Controller.extend({
     'films',
     function() {
       let categoryObj = {}
-      this.categorys.forEach(name => {
+      ENV.APP.categories.forEach(name => {
         categoryObj[name] = this.get(`${name.toLowerCase()}`)
       })
       return categoryObj

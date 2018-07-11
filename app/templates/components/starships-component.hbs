@@ -1,9 +1,9 @@
 <div class="section-content">
-{{#each starships as |starship|}}
+{{#each starships as |starship index|}}
 {{#link-to "starships" starship.id}}
 <div class="card starship">
   <ul>
-    <lh>{{starship.name}}</lh>
+    <lh data-test-header-starships={{index}}>{{starship.name}}</lh>
     <li>Model: {{starship.model}}</li>
     <li>Class: {{starship.starship_class}}</li>
     <li>Manufacturer: {{starship.manufacturer}}</li>

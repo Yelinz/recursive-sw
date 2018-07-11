@@ -1,10 +1,10 @@
 {{category-listing categories=categories toggle=(action "toggleCategory")}}
 
-<details class="filters">
+<details class="filters" data-test-more-filter>
   <summary>More Filter</summary>
   <div class="filters-content">
     {{#if people}}
-    <details class="filter people" id="filter-people">
+    <details class="filter people" id="filter-people" data-test-filter-people>
       <summary>People Filter</summary>
       {{filter-component
         filterCategories=filters.people
@@ -26,7 +26,7 @@
     </details>
     {{/if}}
     {{#if vehicles}}
-    <details class="filter vehicles" id="filter-vehicles">
+    <details class="filter vehicles" id="filter-vehicles" data-test-filter-vehicles>
       <summary>Vehicles Filter</summary>
       {{filter-component
         filterCategories=filters.vehicles

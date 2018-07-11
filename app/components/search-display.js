@@ -1,36 +1,37 @@
 import Component from '@ember/component'
-import { computed } from '@ember/object'
-import ENV from 'recursive-sw/config/environment'
+import { computed, getProperties } from '@ember/object'
 
 export default Component.extend({
-  filters: ENV.APP.filters,
-
   filteredModel: computed(
     'selectedFilters.[]',
-    'categories',
+    'categories.{People,Starships,Vehicles,Species,Planets,Films}',
     'model',
     function() {
       let resultObj = {},
         potentialResult = true
-      if (this.get('selectedFilters').length) {
+      if (this.get('selectedFilters.length')) {
         this.getFilterInfo().forEach(filterInfo => {
           let [filter, category, filterCategory] = filterInfo
-          if (resultObj[category] === undefined) resultObj[category] = []
-          let model = resultObj[category].length
-            ? resultObj[category]
-            : this.get(`model.${category}`)
+          if (resultObj[category] === undefined) {
+            resultObj[category] = []
+          }
           if (filterCategory !== 'numeric') {
-            resultObj[category] = model.filter(obj => {
-              if (obj[filterCategory] === filter) {
-                return true
-              } else if (filterCategory !== 'gender') {
-                return obj[filterCategory].includes(filter)
-              } else {
-                return false
-              }
-            })
+            resultObj[category] = resultObj[category].concat(
+              this.get(`model.${category}`).filter(obj => {
+                if (obj[filterCategory] === filter) {
+                  return true
+                } else if (filterCategory !== 'gender') {
+                  return obj[filterCategory].includes(filter)
+                } else {
+                  return false
+                }
+              })
+            )
           } else if (potentialResult && filterCategory === 'numeric') {
-            resultObj[category] = model.filter(obj => {
+            resultObj[category] = (resultObj[category].length
+              ? resultObj[category]
+              : this.get(`model.${category}`)
+            ).filter(obj => {
               if (obj[filter] !== 'unknown') {
                 let num = parseInt(obj[filter])
                 let numericFilter = this.selectedFilters.find(
@@ -49,6 +50,17 @@ export default Component.extend({
             if (resultObj[category].length === 0) potentialResult = false
           }
         })
+
+        resultObj = Object.assign(
+          {},
+          resultObj,
+          getProperties(
+            this.model,
+            Object.keys(this.categories)
+              .map(word => word.toLowerCase())
+              .filter(category => !resultObj.hasOwnProperty(category))
+          )
+        )
       } else {
         resultObj = this.model
       }
