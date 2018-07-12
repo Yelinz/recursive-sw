@@ -1,4 +1,6 @@
 import Route from '@ember/routing/route'
+import { hash } from 'rsvp'
+import ENV from 'recursive-sw/config/environment'
 
 export default Route.extend({
   queryParams: {
@@ -8,24 +10,23 @@ export default Route.extend({
     vehicles: { refreshModel: true },
     species: { refreshModel: true },
     planets: { refreshModel: true },
-    films: { refreshModel: true }
+    films: { refreshModel: true },
+    selectedFilters: { refreshModel: true }
   },
 
   model(params) {
     let searchResult = {}
 
     if (params.search !== '') {
-      this.controllerFor('search')
-        .get('categorys')
-        .forEach(category => {
-          let name = category.toLowerCase()
-          if (params[name]) {
-            searchResult[name] = this.store.query(name, {
-              search: params.search
-            })
-          }
-        })
+      ENV.APP.categories.forEach(category => {
+        let name = category.toLowerCase()
+        if (params[name]) {
+          searchResult[name] = this.store.query(name, {
+            search: params.search
+          })
+        }
+      })
     }
-    return searchResult
+    return hash(searchResult)
   }
 })

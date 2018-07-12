@@ -1,95 +1,86 @@
-<div class="checkboxes">
-{{#each categorys as |category|}}
-  <label>
-  <input type="checkbox" onclick={{action 'toggleCategory' category}} checked={{get this (to-lowercase category)}}/>
-  {{category}}
-  </label>
-{{/each}}
-</div>
+{{category-listing categories=categories toggle=(action "toggleCategory")}}
 
-<details class="filters">
+<details class="filters" data-test-more-filter>
   <summary>More Filter</summary>
   <div class="filters-content">
     {{#if people}}
-    <details class="filter people" id="filter-people">
+    <details class="filter people" id="filter-people" data-test-filter-people>
       <summary>People Filter</summary>
-      {{filter-component filterCategorys=filters.people toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
+      {{filter-component
+        filterCategories=filters.people
+        queryParameter=selectedFilters
+        toggleFilter=(action "toggleFilter")
+        selectType=(action "selectType")
+        valChange=(action "valChange")}}
     </details>
     {{/if}}
     {{#if starships}}
     <details class="filter starships" id="filter-starships">
       <summary>Starships Filter</summary>
-      {{filter-component filterCategorys=filters.starships toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
+      {{filter-component
+        filterCategories=filters.starships
+        queryParameter=selectedFilters
+        toggleFilter=(action "toggleFilter")
+        selectType=(action "selectType")
+        valChange=(action "valChange")}}
     </details>
     {{/if}}
     {{#if vehicles}}
-    <details class="filter vehicles" id="filter-vehicles">
+    <details class="filter vehicles" id="filter-vehicles" data-test-filter-vehicles>
       <summary>Vehicles Filter</summary>
-      {{filter-component filterCategorys=filters.vehicles toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
+      {{filter-component
+        filterCategories=filters.vehicles
+        queryParameter=selectedFilters
+        toggleFilter=(action "toggleFilter")
+        selectType=(action "selectType")
+        valChange=(action "valChange")}}
     </details>
     {{/if}}
     {{#if species}}
     <details class="filter species" id="filter-species">
       <summary>Species Filter</summary>
-      {{filter-component filterCategorys=filters.species toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
+      {{filter-component
+        filterCategories=filters.species
+        queryParameter=selectedFilters
+        toggleFilter=(action "toggleFilter")
+        selectType=(action "selectType")
+        valChange=(action "valChange")}}
     </details>
     {{/if}}
     {{#if planets}}
     <details class="filter planets" id="filter-planets">
       <summary>Planets Filter</summary>
-      {{filter-component filterCategorys=filters.planets toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
+      {{filter-component
+        filterCategories=filters.planets
+        queryParameter=selectedFilters
+        toggleFilter=(action "toggleFilter")
+        selectType=(action "selectType")
+        valChange=(action "valChange")}}
     </details>
     {{/if}}
     {{#if films}}
     <details class="filter films" id="filter-films">
       <summary>Films Filter</summary>
-      {{filter-component filterCategorys=filters.films toggleFilter=(action "toggleFilter") selectType=(action "selectType") valChange=(action "valChange")}}
+      {{filter-component
+        filterCategories=filters.films
+        queryParameter=selectedFilters
+        toggleFilter=(action "toggleFilter")
+        selectType=(action "selectType")
+        valChange=(action "valChange")}}
     </details>
     {{/if}}
   </div>
 </details>
 
-<input value={{search}} onKeyUp={{action "handleSearch" value="target.value"}} placeholder="Search" class="search"/>
+{{input
+  type="text"
+  class="search"
+  value=search
+  placeholder="Search"
+  onKeyUp=(action "handleSearch" search)}}
 
-{{#if model.people}}
-<details open class="section people">
-  <summary>People</summary>
-  {{people-component people=filteredModel.people}}
-</details>
-{{/if}}
-
-{{#if model.starships}}
-<details class="section starships">
-  <summary>Starships</summary>
-  {{starships-component starships=filteredModel.starships}}
-</details>
-{{/if}}
-
-{{#if model.vehicles}}
-<details class="section vehicles">
-  <summary>Vehicles</summary>
-  {{vehicles-component vehicles=filteredModel.vehicles}}
-</details>
-{{/if}}
-
-{{#if model.species}}
-<details class="section species">
-  <summary>Species</summary>
-  {{species-component species=filteredModel.species}}
-</details>
-{{/if}}
-
-{{#if model.planets}}
-<details class="section planets">
-  <summary>Planets</summary>
-    {{planets-component planets=filteredModel.planets}}
-</details>
-{{/if}}
-
-{{#if model.films}}
-<details class="section films">
-  <summary>Films</summary>
-  {{films-component films=filteredModel.films}}
-</details>
-{{/if}}
-
+{{search-display
+  model=model
+  categories=categories
+  selectedFilters=selectedFilters
+  getFilterInfo=getFilterInfo}}

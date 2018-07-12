@@ -1,9 +1,9 @@
 <div class="section-content">
-{{#each people as |person|}}
+{{#each people as |person index|}}
   {{#link-to "people" person.id}}
     <div class="card person">
       <ul>
-        <lh>{{person.name}}</lh>
+        <lh data-test-header-people={{index}}>{{person.name}}</lh>
         <li>Height: {{person.height}}cm</li>
         <li>Weight: {{person.mass}}kg</li>
         <li>Hair Color: {{person.hair_color}}</li>

@@ -1,12 +1,16 @@
 <div class="filter-content">
-{{#each-in filterCategorys as |name filters|}}
+{{#each-in filterCategories as |name filters|}}
   <div class="filter-category">
     <p>{{name}}</p>
     {{#if (neq name "Numeric")}}
       <div class="filter-checkboxes">
       {{#each filters as |filter|}}
         <label>
-          <input type="checkbox" onclick={{action "toggleFilter" filter}} checked={{filter.checked}}/>
+          {{input
+            type='checkbox'
+            click=(action "toggleFilter" filter)
+            checked=(in-array queryParameter filter)
+            data-test-filter-checkbox=filter}}
           {{filter}}
         </label>
       {{/each}}
@@ -16,12 +20,17 @@
         {{#each filters as |filter|}}
           <div class="filter-input">
             <p>{{filter.name}}:</p>
-            <select onchange={{action 'selectType' value="target.value"}}>
-              <option value="{{filter.name}}-gt" selected>&gt;</option>
-              <option value="{{filter.name}}-eq">=</option>
-              <option value="{{filter.name}}-lt">&lt;</option>
+            <select onchange={{action 'selectType' value="target.value"}} data-test-filter-number-select={{filter.name}}>
+              <option value="{{filter.name}}-gt" selected={{eq filter.type 'gt'}}>&gt;</option>
+              <option value="{{filter.name}}-eq" selected={{eq filter.type 'eq'}}>=</option>
+              <option value="{{filter.name}}-lt" selected={{eq filter.type 'lt'}}>&lt;</option>
             </select>
-            {{input type="number" min=0 value=filter.value input=(action "valChange" (to-lowercase filter.name) filter.value)}}
+            {{input
+              type="number"
+              min=0
+              value=filter.value
+              input=(action "valChange" (to-lowercase filter.name) filter.value)
+              data-test-filter-number=filter.name}}
           </div>
         {{/each}}
       </div>

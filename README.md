@@ -1,7 +1,6 @@
 # recursive-sw
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+A page which displays the API Info from [swapi.co](https://swapi.co).
 
 ## Prerequisites
 
